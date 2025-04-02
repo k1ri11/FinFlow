@@ -1,4 +1,4 @@
-package ru.mirea.finflow.ui.theme
+package ru.mirea.uikit.theme
 
 import androidx.compose.ui.graphics.Color
 

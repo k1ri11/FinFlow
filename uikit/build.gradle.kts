@@ -1,23 +1,17 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "ru.mirea.finflow"
+    namespace = "ru.mirea.uikit"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ru.mirea.finflow"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -43,19 +37,9 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.lifecycle.runtime)
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
-
-    debugImplementation(libs.compose.ui.tooling)
-    debugImplementation(libs.compose.ui.test.manifest)
-
-    implementation(project(":feature:expense"))
-    implementation(project(":core"))
-    implementation(project(":uikit"))
 }

@@ -1,32 +1,118 @@
+#   ----------BUILD TOOLS----------
 [versions]
 agp = "8.8.2"
-kotlin = "2.0.0"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
+hilt = "2.50"
+hiltExt = "1.2.0"
+
+#   ----------ANDROIDX----------
 coreKtx = "1.15.0"
+activityCompose = "1.10.1"
+appcompat = "1.7.0"
+lifecycleRuntime = "2.8.7"
+
+#   ----------COMPOSE----------
+composeBom = "2025.03.01"
+
+#   ----------CAMERA----------
+cameraLifecycle = "1.4.2"
+cameraView = "1.4.2"
+cameraCore = "1.4.2"
+
+#   ----------NETWORK----------
+okhttp = "4.12.0"
+ktor = "2.3.12"
+kotlinxSerialization = "1.7.3"
+
+#   ----------UI UTILS----------
+coilCompose = "2.5.0"
+material = "1.12.0"
+qr-code-analizer = "3.5.3"
+
+#   ----------TESTING----------
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.10.1"
-composeBom = "2025.03.01"
 
 [libraries]
+#   ----------ANDROIDX CORE----------
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
+lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntime" }
+
+#   ----------COMPOSE----------
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-viewbinding = { group = "androidx.compose.ui", name = "ui-viewbinding" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+
+#   ----------CAMERA----------
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraCore" }
+
+#   ----------NETWORK----------
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlinx-serizlization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+#   ----------UI UTILS----------
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+code-analizer = { module = "com.google.zxing:core", version.ref = "qr-code-analizer" }
+
+#   ----------TESTING----------
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+#   ----------HILT----------
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltExt" }
+
+[bundles]
+compose = [
+    "compose-bom",
+    "compose-material3",
+    "compose-ui-tooling-preview",
+    "compose-ui",
+    "compose-ui-graphics",
+    "compose-ui-viewbinding",
+    "lifecycle-runtime-compose"
+]
+
+network = [
+    "ktor-client-okhttp",
+    "okhttp",
+    "logging-interceptor",
+    "kotlinx-serizlization",
+    "ktor-client-core",
+    "ktor-client-content-negotiation",
+    "ktor-client-logging",
+    "ktor-serialization-kotlinx-json"
+]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
 

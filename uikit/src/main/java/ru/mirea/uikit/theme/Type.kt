@@ -1,4 +1,4 @@
-package ru.mirea.finflow.ui.theme
+package ru.mirea.uikit.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
