@@ -20,7 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import ru.mirea.core.navigation.navigator.Navigator
+import ru.mirea.core.navigation.screens.BottomNavScreens
+import ru.mirea.core.navigation.screens.Screens
 import ru.mirea.core.presentation.AppScaffold
+import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.collectInLaunchedEffect
 import ru.mirea.core.util.useBy
 import ru.mirea.uikit.R
@@ -35,9 +40,9 @@ import ru.mirea.uikit.theme.FinFlowTheme
 fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToMain: () -> Unit,
-    viewModel: RegisterViewModel = hiltViewModel()
+    holder: UiHandler<RegisterState, RegisterEvent, RegisterEffect>
 ) {
-    val (state, event, effect) = useBy(viewModel)
+    val (state, event, effect) = holder
 
     effect.collectInLaunchedEffect { registerEffect ->
         when (registerEffect) {
@@ -132,7 +137,7 @@ private fun RegisterContent(
 
         OutlinedButton(
             label = stringResource(R.string.login_button),
-            onClick = { onNavigateToLogin() },
+            onClick = onNavigateToLogin,
         )
 
         if (state.error != null) {
@@ -145,12 +150,30 @@ private fun RegisterContent(
     }
 }
 
+@Composable
+fun RegisterNavScreen(
+    viewModel: RegisterViewModel = hiltViewModel(),
+    navigator: Navigator,
+) {
+    val holder = useBy(viewModel)
+    RegisterScreen(
+        onNavigateToLogin = {
+            navigator.navigateAndPopUp(
+                Screens.Login.route,
+                Screens.Register.route
+            )
+        },
+        onNavigateToMain = { navigator.navigateAndClearBackStack(BottomNavScreens.Home.route) },
+        holder = holder,
+    )
+}
+
 @Preview(
     uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
     showBackground = true
 )
 @Composable
-private fun LoginContentPreviewLight() {
+private fun RegisterContentPreviewLight() {
     FinFlowTheme {
         RegisterContent(
             state = RegisterState(),
@@ -165,12 +188,12 @@ private fun LoginContentPreviewLight() {
     backgroundColor = 0xFF101010, showBackground = true
 )
 @Composable
-private fun LoginContentPreviewDark() {
+private fun RegisterContentPreviewDark() {
     FinFlowTheme {
-        RegisterContent(
-            state = RegisterState(),
-            event = {},
+        RegisterScreen(
             onNavigateToLogin = {},
+            onNavigateToMain = {},
+            holder = UiHandler(RegisterState(), {}, MutableSharedFlow())
         )
     }
 }

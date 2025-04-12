@@ -28,7 +28,8 @@ val lightFFColorScheme: FFColorScheme = FFColorScheme(
     ),
     icon = FFColorScheme.IconColors(
         primary = LightColors.White,
-        secondary = LightColors.LightIconGray
+        secondary = LightColors.LightIconGray,
+        brand = LightColors.GreenBrand
     ),
     status = FFColorScheme.StatusColors(
         error = LightColors.Red,
@@ -60,7 +61,8 @@ val darkFFColorScheme: FFColorScheme = FFColorScheme(
     ),
     icon = FFColorScheme.IconColors(
         primary = DarkColors.White,
-        secondary = DarkColors.LightIconGray
+        secondary = DarkColors.LightIconGray,
+        brand = DarkColors.GreenBrand
     ),
     status = FFColorScheme.StatusColors(
         error = DarkColors.Red,
@@ -118,6 +120,7 @@ data class FFColorScheme(
     data class IconColors(
         val primary: Color,
         val secondary: Color,
+        val brand: Color,
     )
 
     @Immutable

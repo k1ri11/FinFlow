@@ -20,7 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import ru.mirea.core.navigation.navigator.Navigator
+import ru.mirea.core.navigation.screens.BottomNavScreens
+import ru.mirea.core.navigation.screens.Screens
 import ru.mirea.core.presentation.AppScaffold
+import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.collectInLaunchedEffect
 import ru.mirea.core.util.useBy
 import ru.mirea.uikit.R
@@ -35,9 +40,9 @@ import ru.mirea.uikit.theme.FinFlowTheme
 fun LoginScreen(
     onNavigateToRegister: () -> Unit,
     onNavigateToMain: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel()
+    holder: UiHandler<LoginState, LoginEvent, LoginEffect>
 ) {
-    val (state, event, effect) = useBy(viewModel)
+    val (state, event, effect) = holder
 
     effect.collectInLaunchedEffect { loginEffect ->
         when (loginEffect) {
@@ -121,7 +126,7 @@ private fun LoginContent(
 
         OutlinedButton(
             label = stringResource(R.string.register),
-            onClick = { event(LoginEvent.Submit) },
+            onClick = onNavigateToRegister,
         )
 
         if (state.error != null) {
@@ -132,6 +137,19 @@ private fun LoginContent(
             )
         }
     }
+}
+
+@Composable
+fun LoginNavScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navigator: Navigator,
+) {
+    val holder = useBy(viewModel)
+    LoginScreen(
+        onNavigateToRegister = { navigator.navigate(Screens.Register.route) },
+        onNavigateToMain = { navigator.navigateAndClearBackStack(BottomNavScreens.Home.route) },
+        holder = holder,
+    )
 }
 
 @Preview(
@@ -156,10 +174,10 @@ private fun LoginContentPreviewLight() {
 @Composable
 private fun LoginContentPreviewDark() {
     FinFlowTheme {
-        LoginContent(
-            state = LoginState(),
-            event = {},
+        LoginScreen(
             onNavigateToRegister = {},
+            onNavigateToMain = {},
+            holder = UiHandler(LoginState(), {}, MutableSharedFlow())
         )
     }
 }

@@ -1,6 +1,7 @@
 #   ----------BUILD TOOLS----------
 [versions]
 agp = "8.8.2"
+coreSplashscreen = "1.0.1"
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
 hilt = "2.50"
@@ -15,6 +16,7 @@ lifecycleRuntime = "2.8.7"
 
 #   ----------COMPOSE----------
 composeBom = "2025.03.01"
+navigation = "2.8.9"
 
 #   ----------CAMERA----------
 cameraLifecycle = "1.4.2"
@@ -40,6 +42,7 @@ espressoCore = "3.6.1"
 #   ----------ANDROIDX CORE----------
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntime" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
@@ -53,6 +56,7 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-ui-viewbinding = { group = "androidx.compose.ui", name = "ui-viewbinding" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 
 #   ----------CAMERA----------
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
@@ -96,7 +100,8 @@ compose = [
     "compose-ui",
     "compose-ui-graphics",
     "compose-ui-viewbinding",
-    "lifecycle-runtime-compose"
+    "lifecycle-runtime-compose",
+    "compose-navigation"
 ]
 
 network = [
