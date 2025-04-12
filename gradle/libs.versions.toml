@@ -91,6 +91,7 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 compose = [
     "compose-bom",
     "compose-material3",
+    "compose-ui-tooling",
     "compose-ui-tooling-preview",
     "compose-ui",
     "compose-ui-graphics",

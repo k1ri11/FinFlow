@@ -56,5 +56,6 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
 
     implementation(project(":core"))
+    implementation(project(":uikit"))
 
 }

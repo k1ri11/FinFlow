@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import ru.mirea.auth.presentation.AuthScreen
+import ru.mirea.auth.presentation.login.LoginScreen
 import ru.mirea.expense.presentation.ExpenseScreen
 import ru.mirea.uikit.theme.FinFlowTheme
 
@@ -17,9 +17,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AuthScreen(
-                onNavigateToMain = { /* Навигация на главный экран */ }
-            )
+            FinFlowTheme {
+                LoginScreen(
+                    onNavigateToRegister = {},
+                    onNavigateToMain = {},
+                )
+            }
         }
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Вход</string>
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="login_button">Войти</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="or">ИЛИ</string>
+    <string name="username">Имя пользователя</string>
+</resources>

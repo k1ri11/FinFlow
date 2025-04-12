@@ -18,17 +18,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
+import ru.mirea.uikit.theme.FinFlowTheme
 
 /**
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
  * still overridable if necessary.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,
@@ -38,8 +36,8 @@ fun AppScaffold(
     floatingActionButton: @Composable () -> Unit = { },
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     pullToRefreshState: AppPullToRefreshState = rememberAppPullToRefreshState(),
-    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    containerColor: Color = FinFlowTheme.colorScheme.background.primary,
+    contentColor: Color = FinFlowTheme.colorScheme.text.primary,
     contentWindowInsets: WindowInsets = ScaffoldDefaults
         .contentWindowInsets
         .exclude(WindowInsets.navigationBars),
@@ -47,7 +45,6 @@ fun AppScaffold(
 ) {
     Scaffold(
         modifier = Modifier
-            .semantics { testTagsAsResourceId = true }
             .then(modifier),
         topBar = topBar,
         bottomBar = bottomBar,
