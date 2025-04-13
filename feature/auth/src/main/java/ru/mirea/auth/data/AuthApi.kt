@@ -7,10 +7,11 @@ import io.ktor.client.request.setBody
 import ru.mirea.auth.data.model.AuthRequestDto
 import ru.mirea.auth.data.model.AuthResponseDto
 import ru.mirea.auth.data.model.RegisterRequestDto
+import ru.mirea.core.network.AuthClient
 import javax.inject.Inject
 
 class AuthApi @Inject constructor(
-    private val networkClient: HttpClient
+    @AuthClient private val networkClient: HttpClient,
 ) {
     suspend fun login(email: String, password: String): AuthResponseDto {
         return networkClient.post("auth/login") {

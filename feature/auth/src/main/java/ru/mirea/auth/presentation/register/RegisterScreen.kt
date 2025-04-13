@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import ru.mirea.core.navigation.navigator.Navigator
-import ru.mirea.core.navigation.screens.BottomNavScreens
 import ru.mirea.core.navigation.screens.Screens
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
@@ -39,14 +38,13 @@ import ru.mirea.uikit.theme.FinFlowTheme
 @Composable
 fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToMain: () -> Unit,
     holder: UiHandler<RegisterState, RegisterEvent, RegisterEffect>
 ) {
     val (state, event, effect) = holder
 
     effect.collectInLaunchedEffect { registerEffect ->
         when (registerEffect) {
-            is RegisterEffect.NavigateToMain -> onNavigateToMain()
+            is RegisterEffect.NavigateToMain -> {}
             is RegisterEffect.ShowError -> {
                 // Можно показать Snackbar или Toast
             }
@@ -163,7 +161,6 @@ fun RegisterNavScreen(
                 Screens.Register.route
             )
         },
-        onNavigateToMain = { navigator.navigateAndClearBackStack(BottomNavScreens.Home.route) },
         holder = holder,
     )
 }
@@ -192,7 +189,6 @@ private fun RegisterContentPreviewDark() {
     FinFlowTheme {
         RegisterScreen(
             onNavigateToLogin = {},
-            onNavigateToMain = {},
             holder = UiHandler(RegisterState(), {}, MutableSharedFlow())
         )
     }

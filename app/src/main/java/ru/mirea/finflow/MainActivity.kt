@@ -37,6 +37,7 @@ import ru.mirea.core.navigation.screens.Screens
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.presentation.CheckAuthViewModel
 import ru.mirea.expense.presentation.ExpenseScreen
+import ru.mirea.profile.presentation.ProfileNavScreen
 import ru.mirea.uikit.theme.FinFlowTheme
 import javax.inject.Inject
 
@@ -59,16 +60,14 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val isAuthorizedNullable by checkAuthViewModel.isAuthorized.collectAsState(initial = null)
-            var isAuthorized = false
-            isAuthorizedNullable?.let {
-                isAuthorized = it
+            val isAuthorized by checkAuthViewModel.isAuthorized.collectAsState()
+            isAuthorized?.let {
                 isReady = true
-            }
 
-            FinFlowTheme {
-                if (isReady) {
-                    AppNavigation(navigator, isAuthorized)
+                FinFlowTheme {
+                    if (isReady) {
+                        AppNavigation(navigator, it)
+                    }
                 }
             }
         }
@@ -141,7 +140,7 @@ private fun AppNavigation(
                 enterTransition = { enterTransition() },
                 exitTransition = { exitToEndTransition() }
             ) {
-                Box(modifier = Modifier.fillMaxSize()) { Text("экран профиля") }
+                ProfileNavScreen()
             }
             composable(
                 route = BottomNavScreens.Friends.route,
