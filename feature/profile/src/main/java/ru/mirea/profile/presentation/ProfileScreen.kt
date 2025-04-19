@@ -1,7 +1,5 @@
 package ru.mirea.profile.presentation
 
-import android.app.DatePickerDialog
-import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,11 +13,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,11 +42,14 @@ import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.FilledButton
 import ru.mirea.uikit.components.inputs.CommonEditTextField
 import ru.mirea.uikit.components.inputs.SelectableEditTextField
+import ru.mirea.uikit.components.loader.CircularLoader
 import ru.mirea.uikit.components.top_bar.CommonTopBar
 import ru.mirea.uikit.theme.Dimens
 import ru.mirea.uikit.theme.FinFlowTheme
 import ru.mirea.uikit.utils.SystemNavigationPaddings
-import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun ProfileScreen(
@@ -80,19 +89,10 @@ private fun ProfileScreenContent(
     event: (ProfileEvent) -> Unit,
     paddingValues: PaddingValues,
 ) {
-    val context = LocalContext.current
+    var showDatePicker by remember { mutableStateOf(false) }
 
     if (state.isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = FinFlowTheme.colorScheme.background.brand
-            )
-        }
+        CircularLoader()
         return
     }
 
@@ -142,6 +142,7 @@ private fun ProfileScreenContent(
             modifier = Modifier.fillMaxWidth()
         )
 
+        //todo отдавать на бэк в timestamp
         SelectableEditTextField(
             value = profile.birthDate ?: "",
             onValueChange = { },
@@ -149,7 +150,7 @@ private fun ProfileScreenContent(
             editable = state.isEditing,
             modifier = Modifier.fillMaxWidth(),
             trailingIconId = R.drawable.ic_calendar,
-            onClick = { showCalendar(context, event) }
+            onClick = { showDatePicker = true }
         )
 
         if (state.isEditing) {
@@ -165,20 +166,50 @@ private fun ProfileScreenContent(
             SystemNavigationPaddings()
         }
     }
+
+    if (showDatePicker) {
+        ShowDatePicker(
+            onDateSelected = { date ->
+                event(ProfileEvent.BirthDateChanged(date))
+            },
+            onDismiss = { showDatePicker = false }
+        )
+    }
 }
 
-private fun showCalendar(context: Context, event: (ProfileEvent) -> Unit) {
-    val calendar = Calendar.getInstance()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ShowDatePicker(
+    onDateSelected: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val datePickerState = rememberDatePickerState()
+    val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+
     DatePickerDialog(
-        context,
-        { _, year, month, day ->
-            val date = "$day.${month + 1}.$year"
-            event(ProfileEvent.BirthDateChanged(date))
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = {
+                datePickerState.selectedDateMillis?.let { millis ->
+
+                    val formattedDate = formatter.format(Date(millis))
+                    onDateSelected(formattedDate)
+                }
+                onDismiss()
+            }) {
+                Text("OK")
+            }
         },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
-    ).show()
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Отмена")
+            }
+        }
+    ) {
+        DatePicker(
+            state = datePickerState
+        )
+    }
 }
 
 @Composable
@@ -186,9 +217,7 @@ fun ProfileNavScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val holder = useBy(viewModel)
-    ProfileScreen(
-        holder = holder
-    )
+    ProfileScreen(holder = holder)
 }
 
 @Preview(

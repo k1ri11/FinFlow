@@ -37,6 +37,7 @@ import ru.mirea.core.navigation.screens.Screens
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.presentation.CheckAuthViewModel
 import ru.mirea.expense.presentation.ExpenseScreen
+import ru.mirea.feature.friends.presentation.FriendsNavScreen
 import ru.mirea.profile.presentation.ProfileNavScreen
 import ru.mirea.uikit.theme.FinFlowTheme
 import javax.inject.Inject
@@ -147,7 +148,7 @@ private fun AppNavigation(
                 enterTransition = { enterTransition() },
                 exitTransition = { exitToEndTransition() }
             ) {
-                Box(modifier = Modifier.fillMaxSize()) { Text("экран настроек") }
+                FriendsNavScreen()
             }
         }
     }

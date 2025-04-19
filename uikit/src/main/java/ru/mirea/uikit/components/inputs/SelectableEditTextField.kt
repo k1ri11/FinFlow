@@ -1,7 +1,6 @@
 package ru.mirea.uikit.components.inputs
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +67,7 @@ fun SelectableEditTextField(
                 FFIconButton(
                     resId = trailingIconId,
                     tint = if (editable) FinFlowTheme.colorScheme.icon.brand else FinFlowTheme.colorScheme.icon.secondary,
-                    onClick = onClick
+                    onClick = { if (editable) onClick.invoke() }
                 )
             }
         },
@@ -85,7 +84,6 @@ fun SelectableEditTextField(
         singleLine = true,
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick.invoke() }
             .padding(top = 8.dp),
     )
 }

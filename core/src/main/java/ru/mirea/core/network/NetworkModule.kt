@@ -19,6 +19,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.contentType
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
@@ -79,12 +80,16 @@ class NetworkModule {
                     }
 
                     refreshTokens {
-                        // Если нет старых токенов, значит пользователь не авторизован
-                        val oldTokens = oldTokens ?: return@refreshTokens null
-
                         try {
+                            // Если нет старых токенов, значит пользователь не авторизован
+                            val oldTokens = oldTokens ?: run {
+                                tokenManager.clearTokens()
+                                return@refreshTokens null
+                            }
+
                             val response = client.post("auth/refresh") {
                                 contentType(Json)
+                                markAsRefreshTokenRequest()
                                 setBody(mapOf("refresh_token" to oldTokens.refreshToken))
                             }
 
@@ -94,9 +99,14 @@ class NetworkModule {
                             BearerTokens(tokens.accessToken, tokens.refreshToken)
 
                         } catch (e: Exception) {
+                            // Всегда очищаем токены при любой ошибке обновления
                             tokenManager.clearTokens()
                             null
                         }
+                    }
+
+                    sendWithoutRequest { request ->
+                        request.url.host == AUTH_BASE_URL && request.url.encodedPath.contains("auth/refresh")
                     }
                 }
             }
@@ -141,25 +151,30 @@ class NetworkModule {
                     }
 
                     refreshTokens {
-                        // Если нет старых токенов, значит пользователь не авторизован
-                        val oldTokens = oldTokens ?: return@refreshTokens null
-
                         try {
-                            val response = client.post("${AUTH_BASE_URL}auth/refresh") {
-                                contentType(Json)
-                                setBody(mapOf("refresh_token" to oldTokens.refreshToken))
+                            // Если нет старых токенов, значит пользователь не авторизован
+                            val oldTokens = oldTokens ?: run {
+                                tokenManager.clearTokens()
+                                return@refreshTokens null
                             }
 
-                            val tokens = response.body<RefreshTokenResponse>()
+                            val tokens = client.post("${AUTH_BASE_URL}auth/refresh") {
+                                contentType(Json)
+                                markAsRefreshTokenRequest()
+                                setBody(mapOf("refresh_token" to oldTokens.refreshToken))
+                            }.body<RefreshTokenResponse>()
+
                             tokenManager.saveTokens(tokens.accessToken, tokens.refreshToken)
 
                             BearerTokens(tokens.accessToken, tokens.refreshToken)
 
                         } catch (e: Exception) {
+                            // Всегда очищаем токены при любой ошибке обновления
                             tokenManager.clearTokens()
                             null
                         }
                     }
+
                 }
             }
         }

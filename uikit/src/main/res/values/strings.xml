@@ -8,4 +8,8 @@
     <string name="or">ИЛИ</string>
     <string name="username">Имя пользователя</string>
     <string name="profile">Профиль</string>
+    <string name="friends">Друзья</string>
+
+    <string name="positive_balance_value">+%d ₽</string>
+    <string name="negative_balance_value">-%d ₽</string>
 </resources>

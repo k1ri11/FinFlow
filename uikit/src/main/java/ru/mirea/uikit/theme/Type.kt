@@ -276,7 +276,7 @@ val ffType: FFTypography = FFTypography(
     ),
     headlineMedium = TextStyle(
         fontFamily = fontFamily,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.Normal,
         fontSize = 28.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,
@@ -304,7 +304,7 @@ val ffType: FFTypography = FFTypography(
     ),
     titleSmall = TextStyle(
         fontFamily = fontFamily,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.Normal,
         fontSize = 20.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp,

@@ -61,6 +61,7 @@ dependencies {
     implementation(project(":feature:expense"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:profile"))
+    implementation(project(":feature:friends"))
     implementation(project(":core"))
     implementation(project(":uikit"))
 }

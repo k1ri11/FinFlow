@@ -1,38 +1,35 @@
 package ru.mirea.core.navigation.screens
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import ru.mirea.uikit.R
 
 sealed class BottomNavScreens(
     val route: String,
     val title: String,
-    val icon: ImageVector,
+    @DrawableRes val icon: Int,
 ) {
     data object Home : BottomNavScreens(
         route = "home",
         title = "Главная",
-        icon = Icons.Default.Home
+        icon = R.drawable.ic_home
     )
 
     data object Analytics : BottomNavScreens(
         route = "notifications",
         title = "Уведомления",
-        icon = Icons.Default.Notifications
+        icon = R.drawable.ic_calendar
     )
 
     data object Friends : BottomNavScreens(
         route = "friends",
         title = "Друзья",
-        icon = Icons.Default.Person
+        icon = R.drawable.ic_friends
     )
 
     data object Profile : BottomNavScreens(
         route = "profile",
         title = "Профиль",
-        icon = Icons.Default.Person
+        icon = R.drawable.ic_user
     )
 
     companion object {

@@ -1,5 +1,6 @@
 package ru.mirea.profile.presentation
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -125,6 +126,7 @@ class ProfileViewModel @Inject constructor(
         } else {
             updateState { it.copy(isEditing = true) }
         }
+        Log.d("toggleEditMode", state.value.toString())
     }
 
     private fun handleSubmit() {

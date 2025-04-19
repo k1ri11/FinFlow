@@ -7,7 +7,7 @@ import ru.mirea.profile.domain.model.Profile
 fun ProfileDto.toDomain(): Profile = Profile(
     id = id,
     email = email,
-    phone = phone,
+    phone = phone?.drop(2),
     name = name,
     nickname = nickname,
     birthDate = birthDate,
