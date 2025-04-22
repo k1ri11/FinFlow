@@ -7,5 +7,6 @@ data class AuthResult(
 data class User(
     val id: Long,
     val email: String,
-    val name: String? = null
-) 
+    val name: String? = null,
+    val nickname: String,
+)

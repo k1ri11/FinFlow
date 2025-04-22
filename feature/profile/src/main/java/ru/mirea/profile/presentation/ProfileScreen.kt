@@ -40,6 +40,7 @@ import ru.mirea.core.util.useBy
 import ru.mirea.profile.presentation.ProfileEvent.ToggleEditMode
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.FilledButton
+import ru.mirea.uikit.components.buttons.OutlinedButton
 import ru.mirea.uikit.components.inputs.CommonEditTextField
 import ru.mirea.uikit.components.inputs.SelectableEditTextField
 import ru.mirea.uikit.components.loader.CircularLoader
@@ -66,6 +67,8 @@ fun ProfileScreen(
             ProfileEffect.ProfileUpdated -> {
                 // TODO: Show success message
             }
+
+            ProfileEffect.LoggedOut -> {}
         }
     }
 
@@ -116,28 +119,28 @@ private fun ProfileScreenContent(
         CommonEditTextField(
             value = profile.name ?: "",
             onValueChange = { event(ProfileEvent.NameChanged(it)) },
-            label = "Имя",
+            label = stringResource(R.string.name),
             editable = state.isEditing,
         )
 
         CommonEditTextField(
             value = profile.nickname ?: "",
             onValueChange = { event(ProfileEvent.NicknameChanged(it)) },
-            label = "Никнейм",
+            label = stringResource(R.string.nickname),
             editable = state.isEditing,
         )
 
         PhoneEditTextField(
             value = profile.phone ?: "",
             onValueChange = { event(ProfileEvent.PhoneChanged(it)) },
-            label = "Телефон",
+            label = stringResource(R.string.telephone),
             editable = state.isEditing,
         )
 
         CommonEditTextField(
             value = profile.email ?: "",
             onValueChange = { event(ProfileEvent.EmailChanged(it)) },
-            label = "Email",
+            label = stringResource(R.string.email),
             editable = state.isEditing,
             modifier = Modifier.fillMaxWidth()
         )
@@ -146,20 +149,26 @@ private fun ProfileScreenContent(
         SelectableEditTextField(
             value = profile.birthDate ?: "",
             onValueChange = { },
-            label = "Дата рождения",
+            label = stringResource(R.string.birth_date),
             editable = state.isEditing,
             modifier = Modifier.fillMaxWidth(),
             trailingIconId = R.drawable.ic_calendar,
             onClick = { showDatePicker = true }
         )
 
+        Spacer(modifier = Modifier.weight(1f))
+
         if (state.isEditing) {
-            Spacer(modifier = Modifier.weight(1f))
             FilledButton(
-                label = "Сохранить",
+                label = stringResource(R.string.save),
                 onClick = { event(ProfileEvent.Submit) },
             )
         }
+
+        OutlinedButton(
+            label = stringResource(R.string.logout),
+            onClick = { event(ProfileEvent.Logout) }
+        )
 
         Box {
             Spacer(Modifier.height(Dimens.BOTTOM_BAR_HEIGHT))

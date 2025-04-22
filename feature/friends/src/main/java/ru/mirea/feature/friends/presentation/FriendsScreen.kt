@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.MutableSharedFlow
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
@@ -27,17 +30,19 @@ import ru.mirea.uikit.components.loader.CircularLoader
 import ru.mirea.uikit.components.money_bar.MoneyProgressBar
 import ru.mirea.uikit.components.top_bar.CommonTopBar
 import ru.mirea.uikit.theme.FinFlowTheme
+import ru.mirea.uikit.utils.appNavigationBarPaddings
+import ru.mirea.uikit.utils.systemNavigationPaddings
 
 @Composable
 fun FriendsScreen(
     holder: UiHandler<FriendsState, FriendsEvent, FriendsEffect>,
+    pagingFriends: LazyPagingItems<Friend>,
 ) {
     val (state, event, effect) = holder
 
     effect.collectInLaunchedEffect { friendsEffect ->
         when (friendsEffect) {
-            is FriendsEffect.NavigateToFriendDetails -> TODO()
-            is FriendsEffect.ShowError -> TODO()
+            is FriendsEffect.ShowError -> {}
         }
     }
 
@@ -49,19 +54,16 @@ fun FriendsScreen(
             )
         }
     ) { paddingValues ->
-        FriendsScreenContent(state, paddingValues)
+        FriendsScreenContent(state, pagingFriends, paddingValues)
     }
 }
 
 @Composable
 private fun FriendsScreenContent(
     state: FriendsState,
+    lazyPagingItems: LazyPagingItems<Friend>,
     paddingValues: PaddingValues,
 ) {
-
-    if (state.isLoading) {
-        CircularLoader()
-    }
 
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -69,31 +71,46 @@ private fun FriendsScreenContent(
     ) {
         item { Spacer(Modifier.height(paddingValues.calculateTopPadding())) }
 
+        item { Spacer(Modifier.height(16.dp)) }
+
         item {
             MoneyProgressBar(
-                oweMoney = 600,
-                alreadyOwed = 300,
+                oweMoney = state.owed,
+                alreadyOwed = state.payed,
                 modifier = Modifier.fillMaxWidth()
             )
         }
 
-        item { Spacer(Modifier.height(16.dp)) }
+        item { Spacer(Modifier.height(8.dp)) }
 
-        items(state.friends) { friend ->
-            FriendItem(friend)
+        items(
+            count = lazyPagingItems.itemCount,
+//            key = lazyPagingItems.itemKey { it.id }
+        ) { index ->
+            val friend = lazyPagingItems[index]
+            friend?.let { FriendItem(friend) }
         }
+
+        item {
+            if (lazyPagingItems.loadState.append is LoadState.Loading) {
+                CircularLoader()
+            }
+        }
+
+
+        appNavigationBarPaddings()
+        systemNavigationPaddings()
+
     }
-
-
 }
-
 
 @Composable
 fun FriendsNavScreen(
     viewModel: FriendsViewModel = hiltViewModel(),
 ) {
     val holder = useBy(viewModel)
-    FriendsScreen(holder = holder)
+    val lazyPagingItems = viewModel.friendsPagingData.collectAsLazyPagingItems()
+    FriendsScreen(holder = holder, pagingFriends = lazyPagingItems)
 }
 
 @Preview(
@@ -104,7 +121,8 @@ fun FriendsNavScreen(
 private fun FriendsScreenPreviewLight() {
     FinFlowTheme {
         FriendsScreen(
-            UiHandler(FriendsState(), {}, MutableSharedFlow())
+            UiHandler(FriendsState(), {}, MutableSharedFlow()),
+            pagingFriends = MutableSharedFlow<PagingData<Friend>>().collectAsLazyPagingItems()
         )
     }
 }
@@ -119,29 +137,15 @@ private fun FriendsScreenPreviewDark() {
         FriendsScreen(
             UiHandler(
                 FriendsState(
-                    isLoading = false, error = null, owed = 1736, payed = 692, friends = listOf(
-                        Friend(
-                            icon = "invidunt",
-                            name = "Marvin Gross",
-                            owe = 203,
-                            isPositive = false
-                        ),
-                        Friend(
-                            icon = "invidunt",
-                            name = "Marvin Gross",
-                            owe = 203,
-                            isPositive = false
-                        ),
-                        Friend(
-                            icon = "invidunt",
-                            name = "Marvin Gross",
-                            owe = 203,
-                            isPositive = false
-                        ),
-                    )
-
-                ), {}, MutableSharedFlow()
-            )
+                    isLoading = false,
+                    error = null,
+                    owed = 1737,
+                    payed = 692
+                ),
+                {},
+                MutableSharedFlow()
+            ),
+            pagingFriends = MutableSharedFlow<PagingData<Friend>>().collectAsLazyPagingItems()
         )
     }
 }

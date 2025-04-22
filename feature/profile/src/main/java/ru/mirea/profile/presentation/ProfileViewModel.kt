@@ -1,15 +1,16 @@
 package ru.mirea.profile.presentation
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mirea.auth.domain.AuthRepository
 import ru.mirea.core.util.AppDispatchers
 import ru.mirea.core.util.BaseViewModel
 import ru.mirea.profile.domain.ProfileRepository
 import ru.mirea.profile.domain.model.Profile
 import ru.mirea.profile.presentation.ProfileEvent.BirthDateChanged
 import ru.mirea.profile.presentation.ProfileEvent.EmailChanged
+import ru.mirea.profile.presentation.ProfileEvent.Logout
 import ru.mirea.profile.presentation.ProfileEvent.NameChanged
 import ru.mirea.profile.presentation.ProfileEvent.NicknameChanged
 import ru.mirea.profile.presentation.ProfileEvent.PhoneChanged
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: ProfileRepository,
+    private val profileRepository: ProfileRepository,
+    private val authRepository: AuthRepository,
     private val dispatchers: AppDispatchers,
 ) : BaseViewModel<ProfileState, ProfileEvent, ProfileEffect>(ProfileState()) {
 
@@ -39,21 +41,17 @@ class ProfileViewModel @Inject constructor(
             is BirthDateChanged -> updateBirthDate(event.birthDate)
             ToggleEditMode -> toggleEditMode()
             Submit -> handleSubmit()
+            Logout -> handleLogout()
         }
     }
 
     private fun loadProfile() {
         viewModelScope.launch(dispatchers.io) {
             updateState { it.copy(isLoading = true) }
-            repository.getProfile("kirill") // todo сделать прокидывание nickName
+            profileRepository.getProfile()
                 .onSuccess { profile ->
                     originalProfile = profile
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            profile = profile
-                        )
-                    }
+                    updateState { it.copy(isLoading = false, profile = profile) }
                 }
                 .onFailure { error ->
                     updateState { it.copy(isLoading = false) }
@@ -126,7 +124,6 @@ class ProfileViewModel @Inject constructor(
         } else {
             updateState { it.copy(isEditing = true) }
         }
-        Log.d("toggleEditMode", state.value.toString())
     }
 
     private fun handleSubmit() {
@@ -136,7 +133,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(dispatchers.io) {
             updateState { it.copy(isLoading = true) }
 
-            repository.updateProfile(currentState.profile, changedFields)
+            profileRepository.updateProfile(currentState.profile, changedFields)
                 .onSuccess { profile ->
                     originalProfile = profile
                     changedFields.clear()
@@ -151,6 +148,16 @@ class ProfileViewModel @Inject constructor(
                 }
                 .onFailure { error ->
                     updateState { it.copy(isLoading = false) }
+                    emitEffect(ProfileEffect.ShowError(error.message ?: "Неизвестная ошибка"))
+                }
+        }
+    }
+
+    private fun handleLogout() {
+        viewModelScope.launch(dispatchers.io) {
+            authRepository.logout()
+                .onSuccess { emitEffect(ProfileEffect.LoggedOut) }
+                .onFailure { error ->
                     emitEffect(ProfileEffect.ShowError(error.message ?: "Неизвестная ошибка"))
                 }
         }

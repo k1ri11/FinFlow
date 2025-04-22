@@ -51,6 +51,9 @@ dependencies {
 
     ksp(libs.hilt.compiler)
 
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime)
+
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
 

@@ -60,4 +60,5 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":uikit"))
+    implementation(project(":feature:auth"))
 }

@@ -71,7 +71,9 @@ private fun FriendsScreenPreviewLight() {
                 icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s",
                 name = "Иван Калита",
                 owe = 300,
-                isPositive = true
+                id = 1,
+                isPositive = true,
+                status = ""
             )
         )
     }
@@ -88,7 +90,9 @@ private fun FriendsScreenPreviewDark() {
                 icon = "",
                 name = "Иван Калита",
                 owe = 300,
-                isPositive = true
+                isPositive = true,
+                id = 1,
+                status = ""
             )
         )
     }

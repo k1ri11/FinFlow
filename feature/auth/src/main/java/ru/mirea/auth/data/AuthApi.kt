@@ -2,6 +2,7 @@ package ru.mirea.auth.data
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import ru.mirea.auth.data.model.AuthRequestDto
@@ -23,5 +24,12 @@ class AuthApi @Inject constructor(
         return networkClient.post("auth/register") {
             setBody(RegisterRequestDto(email = email, password = password, nickname = name))
         }.body()
+    }
+
+    suspend fun logout(accessToken: String, refreshToken: String) {
+        networkClient.post("auth/logout") {
+            header("Authorization", "Bearer $accessToken")
+            setBody(mapOf("refresh_token" to refreshToken))
+        }
     }
 } 

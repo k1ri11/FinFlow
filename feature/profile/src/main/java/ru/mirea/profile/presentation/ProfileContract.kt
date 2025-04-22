@@ -16,9 +16,11 @@ sealed interface ProfileEvent {
     data class BirthDateChanged(val birthDate: String) : ProfileEvent
     data object ToggleEditMode : ProfileEvent
     data object Submit : ProfileEvent
+    data object Logout : ProfileEvent
 }
 
 sealed interface ProfileEffect {
     data class ShowError(val message: String) : ProfileEffect
     data object ProfileUpdated : ProfileEffect
+    data object LoggedOut : ProfileEffect
 } 

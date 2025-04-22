@@ -24,6 +24,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import ru.mirea.core.network.model.RefreshTokenResponse
+import ru.mirea.core.service.UserService
 import ru.mirea.core.util.Const.AUTH_BASE_URL
 import ru.mirea.core.util.Const.ID_BASE_URL
 import javax.inject.Qualifier
@@ -45,7 +46,7 @@ class NetworkModule {
     @Singleton
     @Provides
     @AuthClient
-    fun provideAuthClient(tokenManager: TokenManager): HttpClient {
+    fun provideAuthClient(tokenManager: TokenManager, userService: UserService): HttpClient {
         return HttpClient(OkHttp) {
             install(ContentNegotiation) {
                 json(Json {
@@ -101,6 +102,7 @@ class NetworkModule {
                         } catch (e: Exception) {
                             // Всегда очищаем токены при любой ошибке обновления
                             tokenManager.clearTokens()
+                            userService.clearUser()
                             null
                         }
                     }
