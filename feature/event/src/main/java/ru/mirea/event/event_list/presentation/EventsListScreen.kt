@@ -34,7 +34,8 @@ import ru.mirea.uikit.utils.systemNavigationPaddings
 fun EventsListScreen(
     modifier: Modifier = Modifier,
     holder: UiHandler<EventsState, EventsEvent, EventsEffect>,
-    onNavigateAdd: () -> Unit,
+    navigateAdd: () -> Unit,
+    navigateDetails: () -> Unit,
 ) {
     val (state, event, effect) = holder
 
@@ -52,7 +53,7 @@ fun EventsListScreen(
         modifier = modifier,
         topBar = { CommonTopBar("Главная") },
     ) { paddingValues ->
-        EventsScreenContent(paddingValues, state.events, onNavigateAdd)
+        EventsScreenContent(paddingValues, state.events, navigateAdd, navigateDetails)
     }
 }
 
@@ -60,7 +61,8 @@ fun EventsListScreen(
 fun EventsScreenContent(
     paddingValues: PaddingValues,
     events: List<Event>,
-    onNavigateAdd: () -> Unit,
+    navigateAdd: () -> Unit,
+    navigateDetails: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -72,14 +74,15 @@ fun EventsScreenContent(
         item { MoneyProgressBar(600, 300) }
         item {
             ListHeader(
-                onAddEventClick = onNavigateAdd
+                onAddEventClick = navigateAdd
             )
         }
         items(events) { item ->
             EventItem(
                 modifier = Modifier.animateItem(),
                 event = item,
-                onClick = {})
+                onClick = navigateDetails
+            )
         }
 
         appNavigationBarPaddings()
@@ -95,7 +98,9 @@ fun EventsNavScreen(
     val holder = useBy(viewModel)
     EventsListScreen(
         holder = holder,
-        onNavigateAdd = { navigator.navigate(Screens.AddEvent.route) })
+        navigateAdd = { navigator.navigate(Screens.AddEvent.route) },
+        navigateDetails = { navigator.navigate(Screens.EventDetails.route) }
+    )
 }
 
 @Preview(
@@ -109,7 +114,8 @@ private fun FriendsScreenPreviewLight() {
             holder = UiHandler(
                 state = EventsState(), dispatch = { }, effectFlow = MutableSharedFlow()
             ),
-            onNavigateAdd = {}
+            navigateAdd = {},
+            navigateDetails = {}
         )
     }
 }

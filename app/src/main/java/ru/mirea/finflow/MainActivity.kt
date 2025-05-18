@@ -37,6 +37,7 @@ import ru.mirea.core.navigation.screens.Screens
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.presentation.CheckAuthViewModel
 import ru.mirea.event.add_event.presentation.AddEventNavScreen
+import ru.mirea.event.details.presentation.EventsDetailsNavScreen
 import ru.mirea.event.event_list.presentation.EventsNavScreen
 import ru.mirea.expense.presentation.ExpenseScreen
 import ru.mirea.feature.friends.presentation.FriendsNavScreen
@@ -160,6 +161,14 @@ private fun AppNavigation(
                 exitTransition = { exitToEndTransition() }
             ) {
                 AddEventNavScreen(navigator = navigator)
+            }
+
+            composable(
+                route = Screens.EventDetails.route,
+                enterTransition = { enterTransition() },
+                exitTransition = { exitToEndTransition() }
+            ) {
+                EventsDetailsNavScreen(navigator = navigator)
             }
         }
     }

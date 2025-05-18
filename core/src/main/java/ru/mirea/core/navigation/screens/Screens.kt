@@ -21,6 +21,11 @@ sealed class Screens : Destination {
         override val destination = "add_event"
     }
 
+    data object EventDetails : Screens() {
+        override val route = "event_details"
+        override val destination = "event_details"
+    }
+
     data object EmptyScreen : Screens() {
         override val route = "empty"
         override val destination = "empty"
