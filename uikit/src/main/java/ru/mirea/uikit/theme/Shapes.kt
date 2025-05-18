@@ -15,6 +15,7 @@ data class FFShapes(
     val medium: RoundedCornerShape,
     val large: RoundedCornerShape,
     val extraLarge: RoundedCornerShape,
+    val extraLargeTopRounded: RoundedCornerShape,
     val full: RoundedCornerShape,
 )
 
@@ -25,5 +26,6 @@ val ffShapes: FFShapes = FFShapes(
     medium = RoundedCornerShape(12.dp),
     large = RoundedCornerShape(16.dp),
     extraLarge = RoundedCornerShape(24.dp),
+    extraLargeTopRounded = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
     full = RoundedCornerShape(percent = 50)
 )

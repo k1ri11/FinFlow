@@ -30,6 +30,7 @@ class NavigatorImpl @Inject constructor() : Navigator {
         navController.popBackStack()
     }
 
+
     override fun navigateAndClearBackStack(route: String) {
         navController.navigate(route) {
             launchSingleTop = true
