@@ -30,10 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.flow.MutableSharedFlow
+import ru.mirea.core.navigation.navigator.Navigator
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.useBy
-import ru.mirea.event.add_event.presentation.AddEventState.Category
+import ru.mirea.event.add_event.domain.models.Category
+import ru.mirea.event.add_event.domain.models.CategoryIcon
+import ru.mirea.event.add_event.presentation.AddEventEvent.CreateEvent
 import ru.mirea.event.add_event.presentation.select_friends.SelectFriendsBS
 import ru.mirea.event.add_event.presentation.widgets.CategoriesRow
 import ru.mirea.event.add_event.presentation.widgets.FriendItem
@@ -49,6 +52,7 @@ import ru.mirea.uikit.utils.systemNavigationPaddings
 fun AddEventScreen(
     holder: UiHandler<AddEventState, AddEventEvent, AddEventEffect>,
     modifier: Modifier = Modifier,
+    onNavigateBack: () -> Unit,
 ) {
     val (state, event, effect) = holder
     var showSelectFriendsBS by remember { mutableStateOf(false) }
@@ -60,16 +64,18 @@ fun AddEventScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = "Создать событие",
                 leftIconId = R.drawable.ic_arrow_back,
-                onLeftIconClick = {},
+                onLeftIconClick = onNavigateBack,
                 rightIconId = R.drawable.ic_person_add,
                 onRightIconClick = { showSelectFriendsBS = true }
             )
         },
         floatingActionButton = {
             FilledButton(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 80.dp),
                 label = "Создать событие",
-                onClick = { /* event создания события */ }
+                onClick = { event(CreateEvent) }
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -188,10 +194,14 @@ fun AddEventScreenContent(
 }
 
 @Composable
-fun AddEventNavScreen() {
+fun AddEventNavScreen(
+    navigator: Navigator,
+) {
     val viewModel: AddEventViewModel = hiltViewModel()
     val holder = useBy(viewModel)
-    AddEventScreen(holder)
+    AddEventScreen(holder,
+        onNavigateBack = { navigator.popBackStack() }
+    )
 }
 
 @Preview(
@@ -208,16 +218,34 @@ private fun AddEventScreenPreviewLight() {
                     description = "sgsdw hsdfd",
                     icon = null,
                     categories = listOf(
-                        Category(id = 0, name = "Клубешник", iconId = ""),
-                        Category(id = 0, name = "Орешник", iconId = ""),
-                        Category(id = 0, name = "Бухарешник", iconId = ""),
+                        Category(
+                            id = 0, name = "Клубешник", CategoryIcon(
+                                id = 8007,
+                                name = "Julia Rollins",
+                                externalUuid = "nunc"
+                            )
+                        ),
+                        Category(
+                            id = 1, name = "Орешник", CategoryIcon(
+                                id = 8007,
+                                name = "Julia Rollins",
+                                externalUuid = "nunc"
+                            )
+                        ),
+                        Category(
+                            id = 2, name = "Бухарешник", CategoryIcon(
+                                id = 8007,
+                                name = "Julia Rollins",
+                                externalUuid = "nunc"
+                            )
+                        ),
                     ),
                     categoryId = null,
                 ),
                 dispatch = {},
                 effectFlow = MutableSharedFlow()
-            )
-
+            ),
+            onNavigateBack = {}
         )
     }
 }

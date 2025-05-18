@@ -27,6 +27,7 @@ import ru.mirea.core.network.model.RefreshTokenResponse
 import ru.mirea.core.service.UserService
 import ru.mirea.core.util.Const.AUTH_BASE_URL
 import ru.mirea.core.util.Const.ID_BASE_URL
+import ru.mirea.core.util.Const.SPLIT_BASE_URL
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -37,6 +38,10 @@ annotation class AuthClient
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class IdClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class SplitClient
 
 
 @Module
@@ -131,6 +136,74 @@ class NetworkModule {
             defaultRequest {
                 contentType(Json)
                 url(ID_BASE_URL)
+            }
+
+            install(HttpTimeout) {
+                connectTimeoutMillis = 30_000
+                requestTimeoutMillis = 30_000
+            }
+
+            install(Logging) {
+                level = LogLevel.ALL
+            }
+
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        val accessToken = tokenManager.accessToken.first()
+                        val refreshToken = tokenManager.refreshToken.first()
+                        if (accessToken != null && refreshToken != null) {
+                            BearerTokens(accessToken, refreshToken)
+                        } else null
+                    }
+
+                    refreshTokens {
+                        try {
+                            // Если нет старых токенов, значит пользователь не авторизован
+                            val oldTokens = oldTokens ?: run {
+                                tokenManager.clearTokens()
+                                return@refreshTokens null
+                            }
+
+                            val tokens = client.post("${AUTH_BASE_URL}auth/refresh") {
+                                contentType(Json)
+                                markAsRefreshTokenRequest()
+                                setBody(mapOf("refresh_token" to oldTokens.refreshToken))
+                            }.body<RefreshTokenResponse>()
+
+                            tokenManager.saveTokens(tokens.accessToken, tokens.refreshToken)
+
+                            BearerTokens(tokens.accessToken, tokens.refreshToken)
+
+                        } catch (e: Exception) {
+                            // Всегда очищаем токены при любой ошибке обновления
+                            tokenManager.clearTokens()
+                            null
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    @Singleton
+    @Provides
+    @SplitClient
+    fun provideSplitClient(tokenManager: TokenManager): HttpClient {
+        return HttpClient(OkHttp) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
+            }
+
+            defaultRequest {
+                contentType(Json)
+                url(SPLIT_BASE_URL)
             }
 
             install(HttpTimeout) {

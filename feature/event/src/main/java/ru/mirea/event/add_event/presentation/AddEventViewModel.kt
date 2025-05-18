@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.mirea.core.util.BaseViewModel
-import ru.mirea.event.add_event.domain.AddEventRepository
+import ru.mirea.event.add_event.domain.repository.AddEventRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,9 +21,9 @@ class AddEventViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getEventCategories()
                 .onSuccess { categories ->
-//                    updateState { it.copy(categories = categories) }
+                    updateState { it.copy(categories = categories) }
                 }
-            // onFailure можно добавить обработку ошибок
+
         }
     }
 
@@ -43,6 +43,32 @@ class AddEventViewModel @Inject constructor(
 
             is AddEventEvent.UpdateMembers -> {
                 updateState { it.copy(members = event.members) }
+            }
+
+            is AddEventEvent.CreateEvent -> {
+                with(state.value) {
+                    if (name.isBlank() || description.isBlank() || categoryId == null) {
+                        emitEffect(AddEventEffect.ShowError("Заполните все поля"))
+                        return
+                    }
+                    viewModelScope.launch {
+                        repository.createEvent(
+                            name = name,
+                            description = description,
+                            categoryId = categoryId,
+                            members = members
+                        ).onSuccess {
+                            emitEffect(AddEventEffect.Success)
+                        }.onFailure {
+                            emitEffect(
+                                AddEventEffect.ShowError(
+                                    it.message ?: "Ошибка создания события"
+                                )
+                            )
+                        }
+                    }
+                }
+
             }
         }
     }

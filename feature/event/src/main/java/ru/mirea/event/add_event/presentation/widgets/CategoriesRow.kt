@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import ru.mirea.event.add_event.presentation.AddEventState.Category
+import ru.mirea.event.add_event.domain.models.Category
 import ru.mirea.uikit.theme.FinFlowTheme
 
 @Composable
@@ -65,7 +65,7 @@ fun CategoryItem(
             .padding(horizontal = 8.dp, vertical = 4.dp),
     ) {
         AsyncImage(
-            model = category.iconId,
+            model = category.icon.externalUuid,
             contentDescription = null,
             modifier = Modifier.size(20.dp),
         )

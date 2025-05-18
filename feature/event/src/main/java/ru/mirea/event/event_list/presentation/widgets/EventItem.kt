@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -38,13 +41,18 @@ fun EventItem(
         AsyncImage(
             modifier = Modifier
                 .size(80.dp)
-                .clip(FinFlowTheme.shapes.small),
-            model = event.photoId,
+                .clip(FinFlowTheme.shapes.large),
+            model = event.iconId,
             contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(R.drawable.placeholder),
+            error = painterResource(R.drawable.placeholder)
         )
+
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
@@ -56,7 +64,9 @@ fun EventItem(
 
             Text(
                 modifier = Modifier,
-                text = event.category,
+                text = event.description,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.secondary
             )
@@ -64,13 +74,13 @@ fun EventItem(
         }
         event.balance?.let {
             Text(
-                text = if (event.isPositive) stringResource(
+                text = if (event.isPositive == true) stringResource(
                     R.string.positive_balance_value,
                     event.balance
                 )
                 else stringResource(R.string.negative_balance_value, event.balance),
                 style = FinFlowTheme.typography.bodyMedium,
-                color = if (event.isPositive) FinFlowTheme.colorScheme.text.positive
+                color = if (event.isPositive == true) FinFlowTheme.colorScheme.text.positive
                 else FinFlowTheme.colorScheme.text.negative
             )
         }
@@ -89,9 +99,9 @@ private fun FriendsScreenPreviewLight() {
             Event(
                 id = 1,
                 name = "Шашлындос",
-                category = "Сходка",
-                photoId = "",
+                description = "Сходка",
                 balance = 200,
+                categoryId = 1,
                 isPositive = true
             ),
             onClick = {}
@@ -109,9 +119,9 @@ private fun FriendsScreenPreviewDark() {
             Event(
                 id = 1,
                 name = "Шашлындос",
-                category = "Сходка",
-                photoId = "",
+                description = "Сходка",
                 balance = 200,
+                categoryId = 1,
                 isPositive = true
             ),
             onClick = {}

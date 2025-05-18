@@ -6,8 +6,3 @@ data class Members(
     val friends: List<Friend> = emptyList(),
     val dummiesNames: List<String> = emptyList(),
 )
-
-data class MembersBody(
-    val userIds: List<Int> = emptyList(),
-    val dummiesNames: List<String> = emptyList(),
-)

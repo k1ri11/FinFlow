@@ -12,7 +12,10 @@ import ru.mirea.uikit.components.buttons.SmallOutlinedButton
 import ru.mirea.uikit.theme.FinFlowTheme
 
 @Composable
-fun ListHeader(modifier: Modifier = Modifier) {
+fun ListHeader(
+    onAddEventClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -26,7 +29,7 @@ fun ListHeader(modifier: Modifier = Modifier) {
         SmallOutlinedButton(
             label = "Добавить",
             iconId = R.drawable.ic_plus,
-            onClick = {}
+            onClick = onAddEventClick
         )
     }
 }
@@ -35,6 +38,6 @@ fun ListHeader(modifier: Modifier = Modifier) {
 @Composable
 private fun ListHeaderPreview() {
     FinFlowTheme {
-        ListHeader()
+        ListHeader(onAddEventClick = {})
     }
 }

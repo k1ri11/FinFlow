@@ -43,6 +43,7 @@ fun CommonTopBar(
                 .weight(1f)
                 .padding(horizontal = 8.dp),
             text = title,
+            style = FinFlowTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,

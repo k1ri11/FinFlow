@@ -1,4 +1,4 @@
-package ru.mirea.event.add_event.data
+package ru.mirea.event.add_event.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -12,7 +12,7 @@ data class CategoryListResponseDto(
 @Serializable
 data class CategoryDto(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("name")
     val name: String,
     @SerialName("icon")
@@ -22,9 +22,10 @@ data class CategoryDto(
 @Serializable
 data class CategoryIconDto(
     @SerialName("id")
-    val id: Long,
+    val id: Int,
     @SerialName("name")
     val name: String,
     @SerialName("external_uuid")
     val externalUuid: String,
-) 
+)
+
