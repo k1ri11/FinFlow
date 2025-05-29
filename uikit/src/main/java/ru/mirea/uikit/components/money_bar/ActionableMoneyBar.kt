@@ -90,8 +90,8 @@ fun ActionableMoneyBar(
     }
 }
 
-enum class GroupTabs(name: String) {
-    ACTIVITY("Действия"), MEMBERS("Участники"), BALANCES("Балансы")
+enum class GroupTabs(val title: String) {
+    ACTIVITY(title = "Действия"), TRANSACTIONS(title = "Транзакции"), BALANCES(title = "Балансы")
 }
 
 

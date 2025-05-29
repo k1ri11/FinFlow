@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,10 +17,11 @@ import ru.mirea.core.navigation.navigator.Navigator
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.useBy
-import ru.mirea.event.details.presentation.EventDetailsEvent.LoadDetails
 import ru.mirea.event.details.presentation.EventDetailsEvent.TabSelected
+import ru.mirea.event.details.presentation.widgets.ActivityItem
 import ru.mirea.event.details.presentation.widgets.DebtItem
 import ru.mirea.event.details.presentation.widgets.DetailsTopCard
+import ru.mirea.event.details.presentation.widgets.TransactionItem
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.money_bar.GroupTabs
 import ru.mirea.uikit.components.top_bar.CommonTopBar
@@ -29,14 +31,15 @@ import ru.mirea.uikit.utils.systemNavigationPaddings
 fun EventsDetailsListScreen(
     holder: UiHandler<EventDetailsState, EventDetailsEvent, EventDetailsEffect>,
     navigateBack: () -> Unit,
+    eventId: Int,
     modifier: Modifier = Modifier,
 ) {
     val (state, event, effect) = holder
 
     // TODO: обработка эффектов
 
-    androidx.compose.runtime.LaunchedEffect(Unit) {
-        event(LoadDetails)
+    LaunchedEffect(eventId) {
+        event(EventDetailsEvent.LoadDetails(eventId))
     }
 
     AppScaffold(
@@ -83,8 +86,8 @@ fun EventsDetailsScreenContent(
             )
         }
         when (state.selectedTab) {
-            GroupTabs.ACTIVITY -> state.activityItems
-            GroupTabs.MEMBERS -> state.membersItems
+            GroupTabs.ACTIVITY -> items(state.activityItems) { ActivityItem(it) }
+            GroupTabs.TRANSACTIONS -> items(state.transactions) { TransactionItem(it) }
             GroupTabs.BALANCES -> items(state.balancesItems) { DebtItem(it) }
         }
 
@@ -92,14 +95,17 @@ fun EventsDetailsScreenContent(
     }
 }
 
+
 @Composable
 fun EventsDetailsNavScreen(
     navigator: Navigator,
+    eventId: Int,
 ) {
     val viewModel: EventDetailsViewModel = hiltViewModel()
     val holder = useBy(viewModel)
     EventsDetailsListScreen(
         holder = holder,
-        navigateBack = { navigator.popBackStack() }
+        navigateBack = { navigator.popBackStack() },
+        eventId = eventId
     )
 }

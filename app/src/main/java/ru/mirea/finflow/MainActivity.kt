@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import ru.mirea.auth.presentation.login.LoginNavScreen
 import ru.mirea.auth.presentation.register.RegisterNavScreen
@@ -135,7 +137,7 @@ private fun AppNavigation(
                 enterTransition = { enterTransition() },
                 exitTransition = { exitToEndTransition() }
             ) {
-                EventsDetailsNavScreen(navigator = navigator)
+                Text("Заглушка")
             }
             composable(
                 route = BottomNavScreens.Profile.route,
@@ -163,10 +165,16 @@ private fun AppNavigation(
 
             composable(
                 route = Screens.EventDetails.route,
+                arguments = listOf(
+                    navArgument("eventId") {
+                        type = androidx.navigation.NavType.IntType
+                    }
+                ),
                 enterTransition = { enterTransition() },
                 exitTransition = { exitToEndTransition() }
             ) {
-                EventsDetailsNavScreen(navigator = navigator)
+                val eventId = it.arguments?.getInt("eventId") ?: -1
+                EventsDetailsNavScreen(navigator = navigator, eventId = eventId)
             }
         }
     }

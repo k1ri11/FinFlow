@@ -6,6 +6,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.mirea.core.util.BaseViewModel
 import ru.mirea.event.details.data.repository.DetailsRepository
+import ru.mirea.event.details.domain.model.EventActivity
+import ru.mirea.event.details.domain.toDomain
 import ru.mirea.event.details.presentation.widgets.CardData
 import ru.mirea.uikit.components.money_bar.GroupTabs
 import javax.inject.Inject
@@ -18,13 +20,22 @@ class EventDetailsViewModel @Inject constructor(
     override fun event(event: EventDetailsEvent) {
         when (event) {
             is EventDetailsEvent.LoadDetails -> {
-                loadDetails()
-                loadDebts()
+                updateState { it.copy(eventId = event.eventId) }
+                loadDetails(event.eventId)
+                loadDebts(event.eventId)
+                loadActivities(event.eventId)
             }
 
             is EventDetailsEvent.TabSelected -> {
                 updateState { it.copy(selectedTab = event.tab) }
-                fakeRequestForTab(event.tab)
+                if (event.tab == GroupTabs.ACTIVITY) {
+                    val eventId = state.value.eventId
+                    loadActivities(eventId)
+                }
+                if (event.tab == GroupTabs.TRANSACTIONS) {
+                    val eventId = state.value.eventId
+                    loadTransactions(eventId)
+                }
             }
 
             is EventDetailsEvent.Action1Clicked -> {
@@ -38,10 +49,18 @@ class EventDetailsViewModel @Inject constructor(
             is EventDetailsEvent.Action3Clicked -> {
                 fakeRequestForAction(3)
             }
+
+            is EventDetailsEvent.LoadActivities -> {
+                loadActivities(event.eventId)
+            }
+
+            is EventDetailsEvent.LoadTransactions -> {
+                loadTransactions(event.eventId)
+            }
         }
     }
 
-    private fun loadDetails() {
+    private fun loadDetails(eventId: Int) {
         updateState { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
             delay(500) // имитация запроса
@@ -59,10 +78,10 @@ class EventDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadDebts() {
+    private fun loadDebts(eventId: Int) {
         updateState { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            val result = detailsRepository.getDebts(4) // todo прокинуть с экрана
+            val result = detailsRepository.getDebts(eventId)
             result.onSuccess { debts ->
                 updateState { it.copy(balancesItems = debts, isLoading = false) }
             }.onFailure { err ->
@@ -72,27 +91,53 @@ class EventDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun fakeRequestForTab(tab: GroupTabs) {
+    private fun loadActivities(eventId: Int) {
         updateState { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            delay(400)
-            updateState {
-                when (tab) {
-                    GroupTabs.ACTIVITY -> it.copy(
-                        activityItems = listOf(
-                            "Activity 1",
-                            "Activity 2",
-                            "Activity 3"
-                        ), isLoading = false
-                    )
-
-                    GroupTabs.MEMBERS -> it.copy(
-                        membersItems = listOf("Member 1", "Member 2"),
+            val result = detailsRepository.getActivities(eventId)
+            result.onSuccess { activities ->
+                updateState {
+                    it.copy(
+                        activityItems = activities.map { dto ->
+                            EventActivity(
+                                activityId = dto.activityId,
+                                description = dto.description,
+                                iconId = dto.iconId,
+                                datetime = dto.datetime
+                            )
+                        },
                         isLoading = false
                     )
-
-                    GroupTabs.BALANCES -> it.copy(isLoading = false) // balancesItems уже заполняется отдельно
                 }
+            }.onFailure { err ->
+                updateState { it.copy(isLoading = false) }
+                emitEffect(
+                    EventDetailsEffect.ShowError(
+                        err.message ?: "Ошибка загрузки активностей"
+                    )
+                )
+            }
+        }
+    }
+
+    private fun loadTransactions(eventId: Int) {
+        updateState { it.copy(isLoading = true, error = null) }
+        viewModelScope.launch {
+            val result = detailsRepository.getTransactions(eventId)
+            result.onSuccess { transactions ->
+                updateState {
+                    it.copy(
+                        transactions = transactions.map { dto -> dto.toDomain() },
+                        isLoading = false
+                    )
+                }
+            }.onFailure { err ->
+                updateState { it.copy(isLoading = false) }
+                emitEffect(
+                    EventDetailsEffect.ShowError(
+                        err.message ?: "Ошибка загрузки транзакций"
+                    )
+                )
             }
         }
     }
@@ -103,10 +148,10 @@ class EventDetailsViewModel @Inject constructor(
             delay(400)
             updateState {
                 it.copy(
-                    activityItems = listOf(
-                        "Action $action result 1",
-                        "Action $action result 2"
-                    ), isLoading = false
+//                    activityItems = listOf(
+//                        "Action $action result 1",
+//                        "Action $action result 2"
+//                    ), isLoading = false
                 )
             }
         }

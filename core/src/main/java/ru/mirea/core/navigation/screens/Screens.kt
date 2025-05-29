@@ -22,8 +22,9 @@ sealed class Screens : Destination {
     }
 
     data object EventDetails : Screens() {
-        override val route = "event_details"
+        override val route = "event_details/{eventId}"
         override val destination = "event_details"
+        fun createRoute(eventId: Int) = "event_details/$eventId"
     }
 
     data object EmptyScreen : Screens() {

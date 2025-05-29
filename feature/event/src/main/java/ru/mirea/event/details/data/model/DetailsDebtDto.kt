@@ -1,4 +1,4 @@
-package ru.mirea.event.details.data.api
+package ru.mirea.event.details.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

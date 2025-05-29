@@ -35,7 +35,7 @@ fun EventsListScreen(
     modifier: Modifier = Modifier,
     holder: UiHandler<EventsState, EventsEvent, EventsEffect>,
     navigateAdd: () -> Unit,
-    navigateDetails: () -> Unit,
+    navigateDetails: (Int) -> Unit,
 ) {
     val (state, event, effect) = holder
 
@@ -62,7 +62,7 @@ fun EventsScreenContent(
     paddingValues: PaddingValues,
     events: List<Event>,
     navigateAdd: () -> Unit,
-    navigateDetails: () -> Unit,
+    navigateDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -81,7 +81,7 @@ fun EventsScreenContent(
             EventItem(
                 modifier = Modifier.animateItem(),
                 event = item,
-                onClick = navigateDetails
+                onClick = { navigateDetails(item.id) }
             )
         }
 
@@ -99,7 +99,7 @@ fun EventsNavScreen(
     EventsListScreen(
         holder = holder,
         navigateAdd = { navigator.navigate(Screens.AddEvent.route) },
-        navigateDetails = { navigator.navigate(Screens.EventDetails.route) }
+        navigateDetails = { eventId -> navigator.navigate(Screens.EventDetails.createRoute(eventId)) }
     )
 }
 

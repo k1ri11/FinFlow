@@ -106,10 +106,10 @@ private fun ButtonsRow(onTabSelect: (Int) -> Unit) {
         modifier = Modifier.padding(top = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        GroupTabs.entries.toTypedArray().forEachIndexed { index, tab ->
+        GroupTabs.entries.toList().forEachIndexed { index, tab ->
             SmallActionButton(
                 modifier = Modifier.weight(1f),
-                text = tab.name,
+                text = tab.title,
                 onClick = { onTabSelect(index) },
                 selected = true
             )
