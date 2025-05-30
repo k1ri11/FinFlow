@@ -13,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import ru.mirea.event.details.domain.model.DetailsDebt
+import ru.mirea.event.details.domain.model.OptimizedDebt
 import ru.mirea.uikit.theme.FinFlowTheme
 
 @Composable
-fun DebtItem(
-    debtItem: DetailsDebt,
+fun OptimizedDebtItem(
+    optimizedDebtItem: OptimizedDebt,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -37,19 +37,19 @@ fun DebtItem(
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "От: ${debtItem.fromUserId}",
+                text = "От: ${optimizedDebtItem.fromUserId}",
                 style = FinFlowTheme.typography.titleSmall,
                 color = FinFlowTheme.colorScheme.text.primary
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Кому: ${debtItem.toUserId}",
+                text = "Кому: ${optimizedDebtItem.toUserId}",
                 style = FinFlowTheme.typography.titleSmall,
                 color = FinFlowTheme.colorScheme.text.primary
             )
         }
         Text(
-            text = debtItem.amount.toString(),
+            text = optimizedDebtItem.amount.toString(),
             style = FinFlowTheme.typography.titleLarge,
             color = FinFlowTheme.colorScheme.text.positive,
         )

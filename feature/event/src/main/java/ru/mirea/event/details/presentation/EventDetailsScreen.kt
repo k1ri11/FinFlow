@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,9 +19,10 @@ import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.useBy
 import ru.mirea.event.details.presentation.EventDetailsEvent.TabSelected
-import ru.mirea.event.details.presentation.widgets.ActivityItem
 import ru.mirea.event.details.presentation.widgets.DebtItem
 import ru.mirea.event.details.presentation.widgets.DetailsTopCard
+import ru.mirea.event.details.presentation.widgets.OptimizedDebtItem
+import ru.mirea.event.details.presentation.widgets.ShowOnlyMineSwitch
 import ru.mirea.event.details.presentation.widgets.TransactionItem
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.money_bar.GroupTabs
@@ -57,7 +59,8 @@ fun EventsDetailsListScreen(
         EventsDetailsScreenContent(
             paddingValues = paddingValues,
             state = state,
-            onTabSelect = { tab -> event(TabSelected(tab)) }
+            onTabSelect = { tab -> event(TabSelected(tab)) },
+            onShowOnlyMineChanged = { event(EventDetailsEvent.ShowOnlyMineChanged(it)) }
         )
     }
 }
@@ -68,8 +71,8 @@ fun EventsDetailsScreenContent(
     state: EventDetailsState,
     onTabSelect: (GroupTabs) -> Unit,
     modifier: Modifier = Modifier,
+    onShowOnlyMineChanged: (Boolean) -> Unit = {},
 ) {
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -78,23 +81,62 @@ fun EventsDetailsScreenContent(
         item { Spacer(Modifier.height(paddingValues.calculateTopPadding())) }
         item {
             DetailsTopCard(
-                cardData = state.cardData,
+                cardData = state.cardData.copy(
+                    oweMoney = state.oweToMeSum,
+                    alreadyOwed = state.myOweSum
+                ),
                 onTabSelect = { index ->
                     val tab = GroupTabs.entries.toTypedArray()[index]
                     onTabSelect(tab)
                 },
+                selectedTab = state.selectedTab
             )
         }
         when (state.selectedTab) {
-            GroupTabs.ACTIVITY -> items(state.activityItems) { ActivityItem(it) }
-            GroupTabs.TRANSACTIONS -> items(state.transactions) { TransactionItem(it) }
-            GroupTabs.BALANCES -> items(state.balancesItems) { DebtItem(it) }
-        }
+            GroupTabs.TRANSACTIONS -> items(state.transactions) {
+                TransactionItem(
+                    transaction = it,
+                    modifier = Modifier.animateItem()
+                )
+            }
 
+            GroupTabs.BALANCES -> debtsItems(state, onShowOnlyMineChanged)
+            GroupTabs.OPT_BALANCES -> optimizedDebtsItems(state, onShowOnlyMineChanged)
+        }
         systemNavigationPaddings()
     }
 }
 
+fun LazyListScope.debtsItems(
+    state: EventDetailsState,
+    onShowOnlyMineChanged: (Boolean) -> Unit = {},
+) {
+    item {
+        ShowOnlyMineSwitch(
+            checked = state.showOnlyMine,
+            onCheckedChange = onShowOnlyMineChanged
+        )
+    }
+    items(state.filteredDebts) { DebtItem(debtItem = it, modifier = Modifier.animateItem()) }
+}
+
+fun LazyListScope.optimizedDebtsItems(
+    state: EventDetailsState,
+    onShowOnlyMineChanged: (Boolean) -> Unit,
+) {
+    item {
+        ShowOnlyMineSwitch(
+            checked = state.showOnlyMine,
+            onCheckedChange = onShowOnlyMineChanged
+        )
+    }
+    items(state.filteredOptimizedDebts) {
+        OptimizedDebtItem(
+            optimizedDebtItem = it,
+            modifier = Modifier.animateItem()
+        )
+    }
+}
 
 @Composable
 fun EventsDetailsNavScreen(

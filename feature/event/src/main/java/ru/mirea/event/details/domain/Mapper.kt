@@ -2,12 +2,12 @@ package ru.mirea.event.details.domain
 
 import ru.mirea.event.details.data.model.DebtDto
 import ru.mirea.event.details.data.model.DetailsDebtDto
-import ru.mirea.event.details.data.model.EventActivityDto
+import ru.mirea.event.details.data.model.OptimizedDebtDto
 import ru.mirea.event.details.data.model.ShareDto
 import ru.mirea.event.details.data.model.TransactionDto
 import ru.mirea.event.details.domain.model.Debt
 import ru.mirea.event.details.domain.model.DetailsDebt
-import ru.mirea.event.details.domain.model.EventActivity
+import ru.mirea.event.details.domain.model.OptimizedDebt
 import ru.mirea.event.details.domain.model.Share
 import ru.mirea.event.details.domain.model.Transaction
 import java.time.format.DateTimeFormatter
@@ -30,13 +30,6 @@ private fun formatDate(dateTime: String): String {
         dateTime.take(10)
     }
 }
-
-fun EventActivityDto.toDomain(): EventActivity = EventActivity(
-    activityId = activityId,
-    description = description,
-    iconId = iconId,
-    datetime = formatDate(datetime)
-)
 
 fun DebtDto.toDomain(): Debt = Debt(
     id = id,
@@ -64,4 +57,11 @@ fun TransactionDto.toDomain(): Transaction = Transaction(
     datetime = formatDate(datetime),
     debts = debts?.map { it.toDomain() } ?: emptyList(),
     shares = shares?.map { it.toDomain() } ?: emptyList()
+)
+
+fun OptimizedDebtDto.toDomain() = OptimizedDebt(
+    fromUserId = fromUserId,
+    toUserId = toUserId,
+    amount = amount,
+    eventId = eventId
 )

@@ -2,14 +2,11 @@ package ru.mirea.event.details.presentation
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.mirea.core.util.BaseViewModel
 import ru.mirea.event.details.data.repository.DetailsRepository
-import ru.mirea.event.details.domain.model.EventActivity
 import ru.mirea.event.details.domain.toDomain
 import ru.mirea.event.details.presentation.widgets.CardData
-import ru.mirea.uikit.components.money_bar.GroupTabs
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,53 +14,51 @@ class EventDetailsViewModel @Inject constructor(
     private val detailsRepository: DetailsRepository,
 ) : BaseViewModel<EventDetailsState, EventDetailsEvent, EventDetailsEffect>(EventDetailsState()) {
 
+    private val userId = 1 // захардкоженный id пользователя
+
     override fun event(event: EventDetailsEvent) {
         when (event) {
             is EventDetailsEvent.LoadDetails -> {
                 updateState { it.copy(eventId = event.eventId) }
                 loadDetails(event.eventId)
                 loadDebts(event.eventId)
-                loadActivities(event.eventId)
+                loadOptimizedDebts(event.eventId)
+                loadTransactions(event.eventId)
             }
 
             is EventDetailsEvent.TabSelected -> {
                 updateState { it.copy(selectedTab = event.tab) }
-                if (event.tab == GroupTabs.ACTIVITY) {
-                    val eventId = state.value.eventId
-                    loadActivities(eventId)
-                }
-                if (event.tab == GroupTabs.TRANSACTIONS) {
-                    val eventId = state.value.eventId
-                    loadTransactions(eventId)
-                }
             }
 
-            is EventDetailsEvent.Action1Clicked -> {
-                fakeRequestForAction(1)
-            }
-
-            is EventDetailsEvent.Action2Clicked -> {
-                fakeRequestForAction(2)
-            }
-
-            is EventDetailsEvent.Action3Clicked -> {
-                fakeRequestForAction(3)
-            }
-
-            is EventDetailsEvent.LoadActivities -> {
-                loadActivities(event.eventId)
-            }
-
-            is EventDetailsEvent.LoadTransactions -> {
-                loadTransactions(event.eventId)
+            is EventDetailsEvent.ShowOnlyMineChanged -> {
+                updateState { it.copy(showOnlyMine = event.value) }
+                filterDebts()
+                filterOptimizedDebts()
             }
         }
+    }
+
+    private fun filterDebts() {
+        val stateValue = state.value
+        val filtered = if (stateValue.showOnlyMine) {
+            stateValue.debts.filter { it.fromUserId == userId || it.toUserId == userId }
+        } else stateValue.debts
+        val oweToMeSum = filtered.filter { it.toUserId == userId }.sumOf { it.amount }
+        updateState { it.copy(filteredDebts = filtered, oweToMeSum = oweToMeSum) }
+    }
+
+    private fun filterOptimizedDebts() {
+        val stateValue = state.value
+        val filtered = if (stateValue.showOnlyMine) {
+            stateValue.optimizedDebts.filter { it.fromUserId == userId || it.toUserId == userId }
+        } else stateValue.optimizedDebts
+        val myOweSum = filtered.filter { it.fromUserId == userId }.sumOf { it.amount }
+        updateState { it.copy(filteredOptimizedDebts = filtered, myOweSum = myOweSum) }
     }
 
     private fun loadDetails(eventId: Int) {
         updateState { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            delay(500) // имитация запроса
             updateState {
                 it.copy(
                     cardData = CardData(
@@ -83,7 +78,8 @@ class EventDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = detailsRepository.getDebts(eventId)
             result.onSuccess { debts ->
-                updateState { it.copy(balancesItems = debts, isLoading = false) }
+                updateState { it.copy(debts = debts, isLoading = false) }
+                filterDebts()
             }.onFailure { err ->
                 updateState { it.copy(isLoading = false) }
                 emitEffect(EventDetailsEffect.ShowError(err.message ?: "Ошибка загрузки балансов"))
@@ -91,29 +87,18 @@ class EventDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadActivities(eventId: Int) {
+    private fun loadOptimizedDebts(eventId: Int) {
         updateState { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            val result = detailsRepository.getActivities(eventId)
-            result.onSuccess { activities ->
-                updateState {
-                    it.copy(
-                        activityItems = activities.map { dto ->
-                            EventActivity(
-                                activityId = dto.activityId,
-                                description = dto.description,
-                                iconId = dto.iconId,
-                                datetime = dto.datetime
-                            )
-                        },
-                        isLoading = false
-                    )
-                }
+            val result = detailsRepository.getOptimizedDebts(eventId)
+            result.onSuccess { debts ->
+                updateState { it.copy(optimizedDebts = debts, isLoading = false) }
+                filterOptimizedDebts()
             }.onFailure { err ->
                 updateState { it.copy(isLoading = false) }
                 emitEffect(
                     EventDetailsEffect.ShowError(
-                        err.message ?: "Ошибка загрузки активностей"
+                        err.message ?: "Ошибка загрузки оптимизированных долгов"
                     )
                 )
             }
@@ -141,19 +126,4 @@ class EventDetailsViewModel @Inject constructor(
             }
         }
     }
-
-    private fun fakeRequestForAction(action: Int) {
-        updateState { it.copy(isLoading = true, error = null) }
-        viewModelScope.launch {
-            delay(400)
-            updateState {
-                it.copy(
-//                    activityItems = listOf(
-//                        "Action $action result 1",
-//                        "Action $action result 2"
-//                    ), isLoading = false
-                )
-            }
-        }
-    }
-} 
+}

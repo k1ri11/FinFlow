@@ -33,6 +33,7 @@ import ru.mirea.uikit.theme.FinFlowTheme
 fun DetailsTopCard(
     cardData: CardData,
     onTabSelect: (Int) -> Unit,
+    selectedTab: GroupTabs,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -47,7 +48,7 @@ fun DetailsTopCard(
 
         MembersRow(cardData)
 
-        ButtonsRow(onTabSelect)
+        ButtonsRow(onTabSelect, selectedTab)
     }
 }
 
@@ -101,7 +102,7 @@ private fun MembersRow(cardData: CardData) {
 }
 
 @Composable
-private fun ButtonsRow(onTabSelect: (Int) -> Unit) {
+private fun ButtonsRow(onTabSelect: (Int) -> Unit, selectedTab: GroupTabs) {
     Row(
         modifier = Modifier.padding(top = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -111,7 +112,7 @@ private fun ButtonsRow(onTabSelect: (Int) -> Unit) {
                 modifier = Modifier.weight(1f),
                 text = tab.title,
                 onClick = { onTabSelect(index) },
-                selected = true
+                selected = selectedTab == tab
             )
         }
     }
@@ -119,8 +120,8 @@ private fun ButtonsRow(onTabSelect: (Int) -> Unit) {
 
 @Composable
 private fun EventDetailsMoneyBar(
-    oweMoney: Int,
-    alreadyOwed: Int,
+    meOweMoney: Int,
+    owesMe: Int,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -129,32 +130,32 @@ private fun EventDetailsMoneyBar(
     ) {
         Row {
             Text(
-                text = "Всего должен",
+                text = "Мне должны",
                 style = FinFlowTheme.typography.bodySmall,
                 color = FinFlowTheme.colorScheme.text.secondary
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "уже отдал",
+                text = "Я должен",
                 style = FinFlowTheme.typography.bodySmall,
                 color = FinFlowTheme.colorScheme.text.secondary
             )
         }
         Row {
             Text(
-                text = stringResource(R.string.positive_balance_value, oweMoney),
+                text = stringResource(R.string.positive_balance_value, meOweMoney),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.positive
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = stringResource(R.string.negative_balance_value, alreadyOwed),
+                text = stringResource(R.string.negative_balance_value, owesMe),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.negative
             )
         }
         LinearProgressIndicator(
-            progress = { alreadyOwed.toFloat() / oweMoney.toFloat() },
+            progress = { (meOweMoney.toFloat() + 1) / (owesMe + meOweMoney).toFloat() },
             modifier = Modifier
                 .clip(FinFlowTheme.shapes.large)
                 .background(FinFlowTheme.colorScheme.background.primary)
@@ -180,7 +181,8 @@ private fun MoneyProgressBarPreviewLight() {
                 iconUrl = "",
                 membersIconUrls = listOf("", "", "")
             ),
-            onTabSelect = {}
+            onTabSelect = {},
+            selectedTab = GroupTabs.TRANSACTIONS
         )
     }
 }
