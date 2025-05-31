@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -39,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.bundles.network)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.camera.lifecycle)
@@ -53,6 +56,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
+
+
     implementation(libs.coil.compose)
     implementation(libs.code.analizer)
 
@@ -61,4 +66,5 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":uikit"))
+    implementation(project(":feature:friends"))
 }

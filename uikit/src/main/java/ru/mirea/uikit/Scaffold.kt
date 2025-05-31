@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import ru.mirea.uikit.theme.FinFlowTheme
 
 /**
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
@@ -38,8 +39,8 @@ fun AppScaffold(
     floatingActionButton: @Composable () -> Unit = { },
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     pullToRefreshState: AppPullToRefreshState = rememberAppPullToRefreshState(),
-    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    containerColor: Color = FinFlowTheme.colorScheme.background.primary,
+    contentColor: Color = FinFlowTheme.colorScheme.text.primary,
     contentWindowInsets: WindowInsets = ScaffoldDefaults
         .contentWindowInsets
         .exclude(WindowInsets.navigationBars),

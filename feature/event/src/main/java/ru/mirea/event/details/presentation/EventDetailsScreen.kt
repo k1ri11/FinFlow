@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.core.navigation.navigator.Navigator
+import ru.mirea.core.navigation.screens.Screens.AddSpending.createRoute
 import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.useBy
@@ -25,6 +27,7 @@ import ru.mirea.event.details.presentation.widgets.OptimizedDebtItem
 import ru.mirea.event.details.presentation.widgets.ShowOnlyMineSwitch
 import ru.mirea.event.details.presentation.widgets.TransactionItem
 import ru.mirea.uikit.R
+import ru.mirea.uikit.components.buttons.FilledButton
 import ru.mirea.uikit.components.money_bar.GroupTabs
 import ru.mirea.uikit.components.top_bar.CommonTopBar
 import ru.mirea.uikit.utils.systemNavigationPaddings
@@ -34,12 +37,12 @@ fun EventsDetailsListScreen(
     holder: UiHandler<EventDetailsState, EventDetailsEvent, EventDetailsEffect>,
     navigateBack: () -> Unit,
     eventId: Int,
+    navigator: Navigator,
     modifier: Modifier = Modifier,
 ) {
     val (state, event, effect) = holder
 
     // TODO: обработка эффектов
-
     LaunchedEffect(eventId) {
         event(EventDetailsEvent.LoadDetails(eventId))
     }
@@ -55,6 +58,17 @@ fun EventsDetailsListScreen(
                 rightIconId = R.drawable.ic_edit
             )
         },
+        floatingActionButton = {
+            FilledButton(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                label = "Добавить новую трату",
+                onClick = {
+                    navigator.navigate(createRoute(eventId))
+                },
+                iconId = R.drawable.ic_plus,
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         EventsDetailsScreenContent(
             paddingValues = paddingValues,
@@ -148,6 +162,7 @@ fun EventsDetailsNavScreen(
     EventsDetailsListScreen(
         holder = holder,
         navigateBack = { navigator.popBackStack() },
-        eventId = eventId
+        eventId = eventId,
+        navigator = navigator
     )
 }

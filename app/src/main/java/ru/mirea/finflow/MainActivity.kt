@@ -39,7 +39,7 @@ import ru.mirea.core.presentation.CheckAuthViewModel
 import ru.mirea.event.add_event.presentation.AddEventNavScreen
 import ru.mirea.event.details.presentation.EventsDetailsNavScreen
 import ru.mirea.event.event_list.presentation.EventsNavScreen
-import ru.mirea.expense.presentation.ExpenseScreen
+import ru.mirea.expense.presentation.AddSpendingNavScreen
 import ru.mirea.feature.friends.presentation.FriendsNavScreen
 import ru.mirea.profile.presentation.ProfileNavScreen
 import ru.mirea.uikit.theme.FinFlowTheme
@@ -176,6 +176,20 @@ private fun AppNavigation(
                 val eventId = it.arguments?.getInt("eventId") ?: -1
                 EventsDetailsNavScreen(navigator = navigator, eventId = eventId)
             }
+
+            composable(
+                route = Screens.AddSpending.route,
+                arguments = listOf(
+                    navArgument("eventId") {
+                        type = androidx.navigation.NavType.IntType
+                    }
+                ),
+                enterTransition = { enterTransition() },
+                exitTransition = { exitToEndTransition() }
+            ) {
+                val eventId = it.arguments?.getInt("eventId") ?: -1
+                AddSpendingNavScreen(navigator = navigator, eventId = eventId)
+            }
         }
     }
 }
@@ -184,6 +198,5 @@ private fun AppNavigation(
 @Composable
 fun GreetingPreview() {
     FinFlowTheme {
-        ExpenseScreen()
     }
 }

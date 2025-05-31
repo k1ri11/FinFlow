@@ -91,7 +91,7 @@ fun ActionableMoneyBar(
 }
 
 enum class GroupTabs(val title: String) {
-    TRANSACTIONS(title = "Транзакции"), BALANCES(title = "Балансы"), OPT_BALANCES(title = "Опт. балансы")
+    TRANSACTIONS(title = "Траты"), BALANCES(title = "Балансы"), OPT_BALANCES(title = "Опт. балансы")
 }
 
 

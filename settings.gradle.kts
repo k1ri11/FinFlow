@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "FinFlow"
 include(":app")
-include(":feature:expense")
+include(":feature:spending")
 include(":core")
 include(":uikit")
 include(":feature:auth")

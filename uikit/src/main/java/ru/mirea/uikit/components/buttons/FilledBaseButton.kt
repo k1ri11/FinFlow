@@ -69,7 +69,7 @@ fun FilledBaseButton(
 fun filledButtonColors(
     containerColor: Color = FinFlowTheme.colorScheme.background.brand,
     contentColor: Color = LightColors.White,
-    disabledContainerColor: Color = FinFlowTheme.colorScheme.background.tertiary,
+    disabledContainerColor: Color = FinFlowTheme.colorScheme.background.secondary,
     disabledContentColor: Color = LightColors.LightGray,
 ): ButtonColors = ButtonColors(
     containerColor = containerColor,

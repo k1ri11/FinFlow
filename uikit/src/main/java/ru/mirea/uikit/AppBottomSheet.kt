@@ -50,8 +50,8 @@ fun AppBottomSheet(
         dragHandle = dragHandle,
         sheetState = sheetState,
         shape = FinFlowTheme.shapes.extraLargeTopRounded,
-        contentColor = FinFlowTheme.colorScheme.background.primary,
-        containerColor = FinFlowTheme.colorScheme.background.primary,
+        contentColor = FinFlowTheme.colorScheme.background.tertiary,
+        containerColor = FinFlowTheme.colorScheme.background.tertiary,
         contentWindowInsets = { WindowInsets.statusBars.only(WindowInsetsSides.Bottom) },
         content = {
             content(onDismiss)

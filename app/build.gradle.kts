@@ -57,8 +57,8 @@ dependencies {
 
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+    implementation(project(":feature:spending"))
 
-    implementation(project(":feature:expense"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:profile"))
     implementation(project(":feature:friends"))
