@@ -56,8 +56,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
-
-
     implementation(libs.coil.compose)
     implementation(libs.code.analizer)
 
@@ -66,5 +64,4 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":uikit"))
-    implementation(project(":feature:friends"))
 }

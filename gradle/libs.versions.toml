@@ -41,6 +41,7 @@ espressoCore = "3.6.1"
 #   ----------LIBRARIES----------
 coilComposeVersion = "3.0.4" # before update, update kotlin version
 pagingCompose = "3.3.6"
+jetbrainsKotlinJvm = "2.0.20"
 
 [libraries]
 #   ----------ANDROIDX CORE----------
@@ -134,5 +135,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 

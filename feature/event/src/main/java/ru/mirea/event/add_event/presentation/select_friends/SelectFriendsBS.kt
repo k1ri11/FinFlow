@@ -43,14 +43,13 @@ import ru.mirea.event.add_event.domain.models.Members
 import ru.mirea.event.add_event.presentation.select_friends.SelectFriendsEffect.Saved
 import ru.mirea.event.add_event.presentation.select_friends.SelectFriendsEvent.SelectFriend
 import ru.mirea.event.add_event.presentation.select_friends.SelectFriendsEvent.UnselectFriend
-import ru.mirea.feature.friends.domain.model.Friend
-import ru.mirea.feature.friends.domain.model.SelectableFriend
-import ru.mirea.feature.friends.presentation.widgets.SelectableFriendItem
+import ru.mirea.friends_api.Friend
 import ru.mirea.uikit.AppBottomSheet
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.FilledButton
 import ru.mirea.uikit.components.buttons.SmallOutlinedButton
 import ru.mirea.uikit.components.icon.FFIconButton
+import ru.mirea.uikit.components.items.SelectableFriendItem
 import ru.mirea.uikit.components.top_bar.CommonTopBar
 import ru.mirea.uikit.theme.FinFlowTheme
 
@@ -232,12 +231,9 @@ fun SelectFriendsScreenContent(
                 val friend = lazyPagingItems[index]
                 friend?.let {
                     SelectableFriendItem(
-                        friend = SelectableFriend(
-                            id = friend.id,
-                            icon = friend.icon,
-                            name = friend.name,
-                            isSelected = state.selectedFriends.contains(friend)
-                        ),
+                        name = friend.name,
+                        icon = friend.icon,
+                        isSelected = state.selectedFriends.contains(friend),
                         modifier = Modifier
                             .animateItem()
                             .clickable {

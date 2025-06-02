@@ -3,7 +3,7 @@ package ru.mirea.profile.presentation
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.mirea.auth.domain.AuthRepository
+import ru.mirea.auth_api.AuthRepository
 import ru.mirea.core.util.AppDispatchers
 import ru.mirea.core.util.BaseViewModel
 import ru.mirea.profile.domain.ProfileRepository

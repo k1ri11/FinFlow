@@ -3,17 +3,18 @@ package ru.mirea.event.add_event.presentation.select_friends
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingSource
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.mirea.core.util.BaseViewModel
 import ru.mirea.core.util.Const.PAGE_SIZE
 import ru.mirea.event.add_event.domain.models.Members
-import ru.mirea.feature.friends.data.repository.FriendsPagingSource
+import ru.mirea.friends_api.Friend
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectFriendsViewModel @Inject constructor(
-    private val friendsPagingSource: FriendsPagingSource,
+    private val friendsPagingSource: PagingSource<Int, Friend>,
 ) :
     BaseViewModel<SelectFriendsState, SelectFriendsEvent, SelectFriendsEffect>(SelectFriendsState()) {
 

@@ -1,7 +1,7 @@
 package ru.mirea.event.add_event.presentation.select_friends
 
 import ru.mirea.event.add_event.domain.models.Members
-import ru.mirea.feature.friends.domain.model.Friend
+import ru.mirea.friends_api.Friend
 
 data class TempFriend(val name: String)
 

@@ -63,5 +63,5 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":uikit"))
-    implementation(project(":feature:friends"))
+    implementation(project(":feature:friends-api"))
 }

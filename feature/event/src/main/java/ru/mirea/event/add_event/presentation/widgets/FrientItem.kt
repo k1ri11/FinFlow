@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import ru.mirea.feature.friends.domain.model.Friend
+import ru.mirea.friends_api.Friend
 import ru.mirea.uikit.theme.FinFlowTheme
 
 @Composable

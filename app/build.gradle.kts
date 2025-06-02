@@ -59,9 +59,12 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
     implementation(project(":feature:spending"))
 
-    implementation(project(":feature:auth"))
+    implementation(project(":feature:auth-api"))
+    implementation(project(":feature:auth-impl"))
+
     implementation(project(":feature:profile"))
-    implementation(project(":feature:friends"))
+    implementation(project(":feature:friends-impl"))
+    implementation(project(":feature:friends-api"))
     implementation(project(":feature:event"))
     implementation(project(":core"))
     implementation(project(":uikit"))
