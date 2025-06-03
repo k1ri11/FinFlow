@@ -1,4 +1,4 @@
-package ru.mirea.core.navigation.screens
+package ru.mirea.uikit.components.navigation
 
 import androidx.annotation.DrawableRes
 import ru.mirea.uikit.R
@@ -14,12 +14,6 @@ sealed class BottomNavScreens(
         icon = R.drawable.ic_home
     )
 
-    data object Analytics : BottomNavScreens(
-        route = "notifications",
-        title = "Уведомления",
-        icon = R.drawable.ic_calendar
-    )
-
     data object Friends : BottomNavScreens(
         route = "friends",
         title = "Друзья",
@@ -33,6 +27,6 @@ sealed class BottomNavScreens(
     )
 
     companion object {
-        val items = listOf(Home, Analytics, Friends, Profile)
+        val items = listOf(Home, Friends, Profile)
     }
 } 

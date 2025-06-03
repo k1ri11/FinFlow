@@ -15,9 +15,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import ru.mirea.core.navigation.Screens.AddSpending.createRoute
 import ru.mirea.core.navigation.navigator.Navigator
-import ru.mirea.core.navigation.screens.Screens.AddSpending.createRoute
-import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.useBy
 import ru.mirea.event.details.presentation.EventDetailsEvent.TabSelected
@@ -26,6 +25,7 @@ import ru.mirea.event.details.presentation.widgets.DetailsTopCard
 import ru.mirea.event.details.presentation.widgets.OptimizedDebtItem
 import ru.mirea.event.details.presentation.widgets.ShowOnlyMineSwitch
 import ru.mirea.event.details.presentation.widgets.TransactionItem
+import ru.mirea.uikit.AppScaffold
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.FilledButton
 import ru.mirea.uikit.components.money_bar.GroupTabs

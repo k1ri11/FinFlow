@@ -1,6 +1,7 @@
 package ru.mirea.event.event_list.presentation
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import ru.mirea.core.navigation.Screens
 import ru.mirea.core.navigation.navigator.Navigator
-import ru.mirea.core.navigation.screens.Screens
-import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.collectInLaunchedEffect
 import ru.mirea.core.util.useBy
@@ -24,7 +24,7 @@ import ru.mirea.event.event_list.domain.Event
 import ru.mirea.event.event_list.presentation.EventsEvent.LoadEvents
 import ru.mirea.event.event_list.presentation.widgets.EventItem
 import ru.mirea.event.event_list.presentation.widgets.ListHeader
-import ru.mirea.uikit.components.money_bar.MoneyProgressBar
+import ru.mirea.uikit.AppScaffold
 import ru.mirea.uikit.components.top_bar.CommonTopBar
 import ru.mirea.uikit.theme.FinFlowTheme
 import ru.mirea.uikit.utils.appNavigationBarPaddings
@@ -57,6 +57,7 @@ fun EventsListScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EventsScreenContent(
     paddingValues: PaddingValues,
@@ -71,8 +72,7 @@ fun EventsScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item { Spacer(Modifier.height(paddingValues.calculateTopPadding())) }
-        item { MoneyProgressBar(600, 300) }
-        item {
+        stickyHeader {
             ListHeader(
                 onAddEventClick = navigateAdd
             )

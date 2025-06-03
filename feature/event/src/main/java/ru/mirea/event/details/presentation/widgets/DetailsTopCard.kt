@@ -65,8 +65,8 @@ private fun IconWithMoneyBar(cardData: CardData) {
             model = cardData.iconUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(R.drawable.placeholder),
-            error = painterResource(R.drawable.placeholder)
+            placeholder = painterResource(R.drawable.placeholder_money),
+            error = painterResource(R.drawable.placeholder_money)
         )
         EventDetailsMoneyBar(cardData.oweMoney, cardData.alreadyOwed)
     }
@@ -92,8 +92,8 @@ private fun MembersRow(cardData: CardData) {
                     model = iconUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(R.drawable.placeholder),
-                    error = painterResource(R.drawable.placeholder)
+                    placeholder = painterResource(R.drawable.placeholder_money),
+                    error = painterResource(R.drawable.placeholder_money)
                 )
             }
         }

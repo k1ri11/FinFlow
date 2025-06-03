@@ -1,4 +1,4 @@
-package ru.mirea.core.navigation.screens
+package ru.mirea.core.navigation
 
 interface Destination {
     val route: String

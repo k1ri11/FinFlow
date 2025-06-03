@@ -33,11 +33,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.flow.MutableSharedFlow
 import ru.lab4u.android.core.uikit.components.inputs.PhoneEditTextField
-import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.collectInLaunchedEffect
 import ru.mirea.core.util.useBy
 import ru.mirea.profile.presentation.ProfileEvent.ToggleEditMode
+import ru.mirea.uikit.AppScaffold
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.FilledButton
 import ru.mirea.uikit.components.buttons.OutlinedButton

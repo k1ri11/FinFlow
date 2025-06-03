@@ -45,8 +45,8 @@ fun EventItem(
             model = event.iconId,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(R.drawable.placeholder),
-            error = painterResource(R.drawable.placeholder)
+            placeholder = painterResource(R.drawable.placeholder_money),
+            error = painterResource(R.drawable.placeholder_money)
         )
 
         Column(

@@ -19,12 +19,12 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.MutableSharedFlow
-import ru.mirea.core.presentation.AppScaffold
 import ru.mirea.core.util.UiHandler
 import ru.mirea.core.util.collectInLaunchedEffect
 import ru.mirea.core.util.useBy
 import ru.mirea.feature.friends.presentation.widgets.FriendItem
 import ru.mirea.friends_api.Friend
+import ru.mirea.uikit.AppScaffold
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.loader.CircularLoader
 import ru.mirea.uikit.components.money_bar.MoneyProgressBar
