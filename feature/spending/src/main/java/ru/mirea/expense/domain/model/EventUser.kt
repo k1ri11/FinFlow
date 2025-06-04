@@ -4,7 +4,7 @@ data class EventUser(
     val id: Int,
     val name: String,
     val isDummy: Boolean,
-    val profile: UserProfile,
+    val profile: UserProfile? = null,
 )
 
 data class UserProfile(

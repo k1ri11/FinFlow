@@ -6,7 +6,6 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import ru.mirea.core.network.SplitClient
 import ru.mirea.event.details.data.model.DetailsDebtDto
-import ru.mirea.event.details.data.model.OptimizedDebtDto
 import ru.mirea.event.details.data.model.TransactionDto
 import ru.mirea.event.details.data.model.TransactionsResponseDto
 import javax.inject.Inject
@@ -23,7 +22,11 @@ class DetailsApi @Inject constructor(
         return client.get("event/$eventId/transaction").body<TransactionsResponseDto>().transactions
     }
 
-    suspend fun getOptimizedDebts(eventId: Int): List<OptimizedDebtDto> {
-        return client.post("event/$eventId/optimized-debts").body()
+    suspend fun optimizeDebts(eventId: Int) {
+        client.post("event/$eventId/optimized-debts")
+    }
+
+    suspend fun getOptimizedDebts(eventId: Int): List<DetailsDebtDto> {
+        return client.get("event/$eventId/optimized-debts").body()
     }
 } 

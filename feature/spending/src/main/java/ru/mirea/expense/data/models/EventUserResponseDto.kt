@@ -12,7 +12,7 @@ data class EventUserResponseDto(
     @SerialName("is_dummy")
     val isDummy: Boolean,
     @SerialName("profile")
-    val profile: ProfileDto,
+    val profile: ProfileDto? = null,
 )
 
 @Serializable

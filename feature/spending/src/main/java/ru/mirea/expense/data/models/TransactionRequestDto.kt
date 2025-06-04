@@ -9,6 +9,6 @@ data class TransactionRequestDto(
     @SerialName("from_user") val fromUser: Int,
     @SerialName("amount") val amount: Double,
     @SerialName("name") val name: String,
-    @SerialName("portion") val portion: Map<Int, Int>,
+    @SerialName("portion") val portion: Map<Int, Float>,
     @SerialName("users") val users: List<Int>,
 )

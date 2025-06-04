@@ -1,5 +1,6 @@
 package ru.mirea.event.details.presentation.widgets
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -119,10 +120,11 @@ private fun ButtonsRow(onTabSelect: (Int) -> Unit, selectedTab: GroupTabs) {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 private fun EventDetailsMoneyBar(
-    meOweMoney: Int,
-    owesMe: Int,
+    oweToMe: Float,
+    meOwe: Float,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -144,19 +146,25 @@ private fun EventDetailsMoneyBar(
         }
         Row {
             Text(
-                text = stringResource(R.string.positive_balance_value, abs(meOweMoney)),
+                text = stringResource(
+                    R.string.positive_balance_value,
+                    String.format("%.2f", abs(oweToMe))
+                ),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.positive
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = stringResource(R.string.negative_balance_value, owesMe),
+                text = stringResource(
+                    R.string.negative_balance_value,
+                    String.format("%.2f", meOwe)
+                ),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.negative
             )
         }
         LinearProgressIndicator(
-            progress = { (meOweMoney.toFloat() + 1) / (owesMe + meOweMoney).toFloat() },
+            progress = { (abs(oweToMe) + 1) / (abs(oweToMe) + abs(meOwe)) },
             modifier = Modifier
                 .clip(FinFlowTheme.shapes.large)
                 .background(FinFlowTheme.colorScheme.background.primary)
@@ -177,8 +185,8 @@ private fun MoneyProgressBarPreviewLight() {
     FinFlowTheme {
         DetailsTopCard(
             CardData(
-                oweMoney = 8610,
-                alreadyOwed = 6615,
+                oweMoney = 8610f,
+                alreadyOwed = 6615f,
                 iconUrl = "",
                 membersIconUrls = listOf("", "", "")
             ),
@@ -195,8 +203,8 @@ private fun MoneyProgressBarPreviewDark() {
 }
 
 data class CardData(
-    val oweMoney: Int,
-    val alreadyOwed: Int,
+    val oweMoney: Float,
+    val alreadyOwed: Float,
     val iconUrl: String,
     val membersIconUrls: List<String>,
 )

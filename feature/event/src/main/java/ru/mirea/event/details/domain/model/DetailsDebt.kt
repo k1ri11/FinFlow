@@ -4,7 +4,8 @@ data class DetailsDebt(
     val id: Int,
     val fromUserId: Int,
     val toUserId: Int,
-    val amount: Int,
-    val transactionId: Int,
+    val amount: Float,
+    val transactionId: Int? = null,
     val requesterName: String,
+    val isPositive: Boolean,
 )

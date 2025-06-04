@@ -108,7 +108,7 @@ private fun FriendItem(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         AsyncImage(
-            model = friend.profile.photo,
+            model = friend.profile?.photo ?: "",
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             contentScale = ContentScale.Crop,
@@ -117,7 +117,7 @@ private fun FriendItem(
         )
         Text(
             modifier = Modifier.weight(1f),
-            text = friend.profile.nickname,
+            text = friend.profile?.nickname ?: friend.name,
             style = FinFlowTheme.typography.titleSmall,
             color = FinFlowTheme.colorScheme.text.primary
         )

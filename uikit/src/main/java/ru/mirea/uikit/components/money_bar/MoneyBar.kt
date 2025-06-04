@@ -49,13 +49,13 @@ fun MoneyProgressBar(
         }
         Row {
             Text(
-                text = stringResource(R.string.positive_balance_value, oweMoney),
+                text = stringResource(R.string.positive_balance_value, oweMoney.toString()),
                 style = FinFlowTheme.typography.headlineMedium,
                 color = FinFlowTheme.colorScheme.text.positive
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = stringResource(R.string.negative_balance_value, alreadyOwed),
+                text = stringResource(R.string.negative_balance_value, alreadyOwed.toString()),
                 style = FinFlowTheme.typography.headlineMedium,
                 color = FinFlowTheme.colorScheme.text.negative
             )

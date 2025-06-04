@@ -4,14 +4,14 @@ data class Debt(
     val id: Int,
     val fromUserId: Int,
     val toUserId: Int,
-    val amount: Int,
+    val amount: Float,
     val transactionId: Int,
 )
 
 data class Share(
     val id: Int,
     val userId: Int,
-    val value: Int,
+    val value: Float,
     val transactionId: Int,
 )
 

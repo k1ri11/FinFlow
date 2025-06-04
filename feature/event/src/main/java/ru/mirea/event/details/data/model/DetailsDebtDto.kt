@@ -8,8 +8,8 @@ data class DetailsDebtDto(
     @SerialName("id") val id: Int,
     @SerialName("from_user_id") val fromUserId: Int,
     @SerialName("to_user_id") val toUserId: Int,
-    @SerialName("amount") val amount: Int,
-    @SerialName("transaction_id") val transactionId: Int,
+    @SerialName("amount") val amount: Float,
+    @SerialName("transaction_id") val transactionId: Int? = null,
     @SerialName("requestor") val requestor: Requestor,
 ) {
     @Serializable

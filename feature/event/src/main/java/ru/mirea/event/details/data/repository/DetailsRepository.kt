@@ -3,7 +3,6 @@ package ru.mirea.event.details.data.repository
 import ru.mirea.event.details.data.api.DetailsApi
 import ru.mirea.event.details.data.model.TransactionDto
 import ru.mirea.event.details.domain.model.DetailsDebt
-import ru.mirea.event.details.domain.model.OptimizedDebt
 import ru.mirea.event.details.domain.toDomain
 import javax.inject.Inject
 
@@ -18,7 +17,11 @@ class DetailsRepository @Inject constructor(
         api.getTransactions(eventId)
     }
 
-    suspend fun getOptimizedDebts(eventId: Int): Result<List<OptimizedDebt>> = runCatching {
+    suspend fun optimizeDebts(eventId: Int) = runCatching {
+        api.optimizeDebts(eventId)
+    }
+
+    suspend fun getOptimizedDebts(eventId: Int): Result<List<DetailsDebt>> = runCatching {
         api.getOptimizedDebts(eventId).map { it.toDomain() }
     }
 } 

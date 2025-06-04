@@ -12,9 +12,9 @@ data class AddSpendingState(
     val payer: EventUser? = null,
     val splitType: SplitType = SplitType.EQUALLY,
     val participants: List<EventUser> = emptyList(),
-    val participantShares: Map<Int, Int> = emptyMap(),
-    val totalDistributed: Int = 0,
-    val totalDistributedPercent: Int = 0,
+    val participantShares: Map<Int, Float> = emptyMap(),
+    val totalDistributed: Float = 0f,
+    val totalDistributedPercent: Float = 0f,
     val buttonEnabled: Boolean = false,
     val eventId: Int? = null,
     val photoUri: String? = null,
@@ -35,7 +35,7 @@ sealed interface AddSpendingEvent {
     data object AddParticipantClicked : AddSpendingEvent
     data class ParticipantsSelected(val users: List<EventUser>) : AddSpendingEvent
 
-    data class ParticipantShareChanged(val user: EventUser, val value: Int) : AddSpendingEvent
+    data class ParticipantShareChanged(val user: EventUser, val value: Float) : AddSpendingEvent
     data class SetEventId(val id: Int) : AddSpendingEvent
     data class PhotoSelected(val uri: Uri) : AddSpendingEvent
     data class QrScanned(val qr: String) : AddSpendingEvent

@@ -174,13 +174,13 @@ fun AddSpendingScreen(
             ) {
                 if (state.splitType == SplitType.UNEQUALLY) {
                     when {
-                        state.totalDistributed == 0 -> Text(
+                        state.totalDistributed == 0f -> Text(
                             text = stringResource(R.string.all_distributed),
                             color = FinFlowTheme.colorScheme.status.success,
                             style = FinFlowTheme.typography.bodyMedium
                         )
 
-                        state.totalDistributed < 0 -> Text(
+                        state.totalDistributed < 0f -> Text(
                             text = stringResource(R.string.wrong_distribution),
                             color = FinFlowTheme.colorScheme.status.error,
                             style = FinFlowTheme.typography.bodyMedium
@@ -195,13 +195,13 @@ fun AddSpendingScreen(
                 }
                 if (state.splitType == SplitType.PERCENTAGE) {
                     when {
-                        state.totalDistributedPercent == 0 -> Text(
+                        state.totalDistributedPercent == 0f -> Text(
                             text = stringResource(R.string.all_distributed),
                             color = FinFlowTheme.colorScheme.status.success,
                             style = FinFlowTheme.typography.bodyMedium
                         )
 
-                        state.totalDistributedPercent < 0 -> Text(
+                        state.totalDistributedPercent < 0f -> Text(
                             text = stringResource(R.string.wrong_distribution),
                             color = FinFlowTheme.colorScheme.status.error,
                             style = FinFlowTheme.typography.bodyMedium
@@ -453,7 +453,7 @@ private fun ParticipantsList(state: AddSpendingState, event: (AddSpendingEvent) 
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AsyncImage(
-                model = participant.profile.photo,
+                model = participant.profile?.photo ?: "",
                 contentDescription = null,
                 modifier = Modifier
                     .size(48.dp)
@@ -464,20 +464,20 @@ private fun ParticipantsList(state: AddSpendingState, event: (AddSpendingEvent) 
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = participant.profile.nickname,
+                text = participant.profile?.nickname ?: participant.name,
                 style = FinFlowTheme.typography.titleSmall,
                 color = FinFlowTheme.colorScheme.text.primary
             )
             val value =
                 if (state.splitType == SplitType.EQUALLY) equallyValue else (state.participantShares[participant.id]
-                    ?: 0)
+                    ?: 0f)
             TextField(
                 modifier = Modifier
                     .width(100.dp),
                 value = value.toString(),
                 onValueChange = {
                     if (state.splitType != SplitType.EQUALLY) {
-                        val intValue = it.toIntOrNull() ?: 0
+                        val intValue = it.toFloatOrNull() ?: 0f
                         event(ParticipantShareChanged(participant, intValue))
                     }
                 },
@@ -552,8 +552,8 @@ fun AddSpendingScreenPreview() {
                 fakeFriend1,
                 fakeFriend2
             ),
-            totalDistributed = 200,
-            totalDistributedPercent = 1444,
+            totalDistributed = 200f,
+            totalDistributedPercent = 1444f,
         ),
         dispatch = {},
         effectFlow = MutableSharedFlow()

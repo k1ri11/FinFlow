@@ -23,8 +23,6 @@ import ru.mirea.core.util.useBy
 import ru.mirea.event.details.presentation.EventDetailsEvent.TabSelected
 import ru.mirea.event.details.presentation.widgets.DebtItem
 import ru.mirea.event.details.presentation.widgets.DetailsTopCard
-import ru.mirea.event.details.presentation.widgets.OptimizedDebtItem
-import ru.mirea.event.details.presentation.widgets.ShowOnlyMineSwitch
 import ru.mirea.event.details.presentation.widgets.TransactionItem
 import ru.mirea.uikit.AppScaffold
 import ru.mirea.uikit.R
@@ -74,7 +72,6 @@ fun EventsDetailsListScreen(
             paddingValues = paddingValues,
             state = state,
             onTabSelect = { tab -> event(TabSelected(tab)) },
-            onShowOnlyMineChanged = { event(EventDetailsEvent.ShowOnlyMineChanged(it)) }
         )
     }
 }
@@ -85,7 +82,6 @@ fun EventsDetailsScreenContent(
     state: EventDetailsState,
     onTabSelect: (GroupTabs) -> Unit,
     modifier: Modifier = Modifier,
-    onShowOnlyMineChanged: (Boolean) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -114,43 +110,20 @@ fun EventsDetailsScreenContent(
                 )
             }
 
-            GroupTabs.BALANCES -> debtsItems(state, onShowOnlyMineChanged)
-            GroupTabs.OPT_BALANCES -> optimizedDebtsItems(state, onShowOnlyMineChanged)
+            GroupTabs.BALANCES -> debtsItems(state)
+            GroupTabs.OPT_BALANCES -> optimizedDebtsItems(state)
         }
         item { Spacer(modifier = Modifier.height(64.dp)) }
         systemNavigationPaddings()
     }
 }
 
-fun LazyListScope.debtsItems(
-    state: EventDetailsState,
-    onShowOnlyMineChanged: (Boolean) -> Unit = {},
-) {
-    item {
-        ShowOnlyMineSwitch(
-            checked = state.showOnlyMine,
-            onCheckedChange = onShowOnlyMineChanged
-        )
-    }
-    items(state.filteredDebts) { DebtItem(debtItem = it, modifier = Modifier.animateItem()) }
+fun LazyListScope.debtsItems(state: EventDetailsState) {
+    items(state.debts) { DebtItem(debtItem = it, modifier = Modifier.animateItem()) }
 }
 
-fun LazyListScope.optimizedDebtsItems(
-    state: EventDetailsState,
-    onShowOnlyMineChanged: (Boolean) -> Unit,
-) {
-    item {
-        ShowOnlyMineSwitch(
-            checked = state.showOnlyMine,
-            onCheckedChange = onShowOnlyMineChanged
-        )
-    }
-    items(state.filteredOptimizedDebts) {
-        OptimizedDebtItem(
-            optimizedDebtItem = it,
-            modifier = Modifier.animateItem()
-        )
-    }
+fun LazyListScope.optimizedDebtsItems(state: EventDetailsState) {
+    items(state.optimizedDebts) { DebtItem(debtItem = it, modifier = Modifier.animateItem()) }
 }
 
 @Composable

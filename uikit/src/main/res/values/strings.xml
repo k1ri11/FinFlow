@@ -16,8 +16,8 @@
     <string name="save">Сохранить</string>
     <string name="logout">Выйти</string>
 
-    <string name="positive_balance_value">+%d ₽</string>
-    <string name="negative_balance_value">%d ₽</string>
+    <string name="positive_balance_value">+%s ₽</string>
+    <string name="negative_balance_value">%s ₽</string>
 
     <string name="create_event">Создать событие</string>
     <string name="event_name">Название события</string>

@@ -8,7 +8,7 @@ data class DebtDto(
     @SerialName("id") val id: Int,
     @SerialName("from_user_id") val fromUserId: Int,
     @SerialName("to_user_id") val toUserId: Int,
-    @SerialName("amount") val amount: Int,
+    @SerialName("amount") val amount: Float,
     @SerialName("transaction_id") val transactionId: Int,
 )
 
@@ -16,7 +16,7 @@ data class DebtDto(
 data class ShareDto(
     @SerialName("id") val id: Int,
     @SerialName("user_id") val userId: Int,
-    @SerialName("value") val value: Int,
+    @SerialName("value") val value: Float,
     @SerialName("transaction_id") val transactionId: Int,
 )
 

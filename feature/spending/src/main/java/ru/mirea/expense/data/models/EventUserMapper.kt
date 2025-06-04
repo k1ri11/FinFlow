@@ -7,7 +7,7 @@ fun EventUserResponseDto.toDomain(): EventUser = EventUser(
     id = id,
     name = name,
     isDummy = isDummy,
-    profile = profile.toDomain()
+    profile = profile?.toDomain()
 )
 
 fun ProfileDto.toDomain(): UserProfile = UserProfile(

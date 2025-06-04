@@ -65,7 +65,7 @@ class AddSpendingViewModel @Inject constructor(
             is AddSpendingEvent.ParticipantsSelected -> {
                 val oldShares = state.value.participantShares
                 val newShares = event.users.associate { user ->
-                    user.id to (oldShares[user.id] ?: 0)
+                    user.id to (oldShares[user.id] ?: 0f)
                 }
                 updateState {
                     it.copy(
@@ -156,17 +156,17 @@ class AddSpendingViewModel @Inject constructor(
         val shares = s.participantShares.values
         when (s.splitType) {
             SplitType.UNEQUALLY -> {
-                val left = amount - shares.sum()
-                updateState { it.copy(totalDistributed = left, totalDistributedPercent = 0) }
+                val left = amount.toFloat() - shares.sum()
+                updateState { it.copy(totalDistributed = left, totalDistributedPercent = 0f) }
             }
 
             SplitType.PERCENTAGE -> {
                 val left = 100 - shares.sum()
-                updateState { it.copy(totalDistributed = 0, totalDistributedPercent = left) }
+                updateState { it.copy(totalDistributed = 0f, totalDistributedPercent = left) }
             }
 
             else -> {
-                updateState { it.copy(totalDistributed = 0, totalDistributedPercent = 0) }
+                updateState { it.copy(totalDistributed = 0f, totalDistributedPercent = 0f) }
             }
         }
     }
@@ -179,14 +179,14 @@ class AddSpendingViewModel @Inject constructor(
                 && state.participants.isNotEmpty()
                 && when (state.splitType) {
             SplitType.EQUALLY -> state.participants.isNotEmpty()
-            SplitType.UNEQUALLY -> allParticipantsFilled() && state.totalDistributed == 0
-            SplitType.PERCENTAGE -> allParticipantsFilled() && state.totalDistributedPercent == 0
+            SplitType.UNEQUALLY -> allParticipantsFilled() && state.totalDistributed == 0f
+            SplitType.PERCENTAGE -> allParticipantsFilled() && state.totalDistributedPercent == 0f
             SplitType.SHARES -> allParticipantsFilled()
         }
     }
 
     private fun allParticipantsFilled(): Boolean {
-        return state.value.participants.all { (state.value.participantShares[it.id] ?: 0) > 0 }
+        return state.value.participants.all { (state.value.participantShares[it.id] ?: 0f) > 0f }
     }
 
     private fun saveSpending() {
@@ -198,16 +198,16 @@ class AddSpendingViewModel @Inject constructor(
             SplitType.SHARES -> "units"
         }
         val portion = when (currentState.splitType) {
-            SplitType.EQUALLY -> currentState.participants.associate { it.id to (currentState.amount / currentState.participants.size) }
+            SplitType.EQUALLY -> currentState.participants.associate { it.id to (currentState.amount.toFloat() / currentState.participants.size.toFloat()) }
             else -> currentState.participantShares
         }
         val requestBody = TransactionRequestDto(
             type = type,
-            fromUser = currentState.payer?.profile?.userId ?: 0,
+            fromUser = currentState.payer?.id ?: 0,
             amount = currentState.amount.toDouble(),
             name = currentState.name,
             portion = portion,
-            users = currentState.participants.map { it.profile.userId }
+            users = currentState.participants.map { it.id }
         )
         updateState { it.copy(isLoading = true) }
         viewModelScope.launch {

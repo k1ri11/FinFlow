@@ -19,7 +19,8 @@ fun DetailsDebtDto.toDomain(): DetailsDebt = DetailsDebt(
     toUserId = toUserId,
     amount = amount,
     transactionId = transactionId,
-    requesterName = requestor.name
+    requesterName = requestor.name,
+    isPositive = amount >= 0
 )
 
 private fun formatDate(dateTime: String): String {
