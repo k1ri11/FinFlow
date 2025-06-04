@@ -6,4 +6,5 @@ data class DetailsDebt(
     val toUserId: Int,
     val amount: Int,
     val transactionId: Int,
-) 
+    val requesterName: String,
+)

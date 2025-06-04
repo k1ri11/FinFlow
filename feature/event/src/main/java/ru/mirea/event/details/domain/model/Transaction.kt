@@ -19,7 +19,6 @@ data class Transaction(
     val id: Int,
     val eventId: Int,
     val name: String,
-    val transactionCategoryId: Int,
     val type: String,
     val fromUser: Int,
     val amount: Int,

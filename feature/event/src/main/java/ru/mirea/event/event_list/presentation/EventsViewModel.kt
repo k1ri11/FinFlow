@@ -1,6 +1,5 @@
 package ru.mirea.event.event_list.presentation
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +23,6 @@ class EventsViewModel @Inject constructor(
                         }
                         .onFailure { err ->
                             updateState { it.copy(isLoading = false, error = err.message) }
-                            Log.d("aboba", "event: ${err.message}")
                             emitEffect(
                                 EventsEffect.ShowError(
                                     err.message ?: "Ошибка загрузки событий"

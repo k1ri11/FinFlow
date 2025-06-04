@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -111,9 +112,11 @@ private fun ProfileScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         AsyncImage(
-            model = profile.avatarUrl ?: "https://via.placeholder.com/100",
+            model = profile.avatarUrl,
             contentDescription = "Аватар",
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(100.dp),
+            placeholder = painterResource(R.drawable.placeholder_user),
+            error = painterResource(R.drawable.placeholder_user),
         )
 
         CommonEditTextField(

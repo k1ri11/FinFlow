@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.SmallOutlinedButton
@@ -22,12 +23,12 @@ fun ListHeader(
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "События",
+            text = stringResource(R.string.events),
             style = FinFlowTheme.typography.bodyLarge,
             color = FinFlowTheme.colorScheme.text.primary
         )
         SmallOutlinedButton(
-            label = "Добавить",
+            label = stringResource(R.string.add_event),
             iconId = R.drawable.ic_plus,
             onClick = onAddEventClick
         )

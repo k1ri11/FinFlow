@@ -18,7 +18,8 @@ fun DetailsDebtDto.toDomain(): DetailsDebt = DetailsDebt(
     fromUserId = fromUserId,
     toUserId = toUserId,
     amount = amount,
-    transactionId = transactionId
+    transactionId = transactionId,
+    requesterName = requestor.name
 )
 
 private fun formatDate(dateTime: String): String {
@@ -50,7 +51,6 @@ fun TransactionDto.toDomain(): Transaction = Transaction(
     id = id,
     eventId = eventId,
     name = name,
-    transactionCategoryId = transactionCategoryId,
     type = type,
     fromUser = fromUser,
     amount = amount,

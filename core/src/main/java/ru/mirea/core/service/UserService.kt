@@ -20,16 +20,26 @@ class UserService @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
     private val nicknameKey = stringPreferencesKey("nickname")
+    private val userIdKey = stringPreferencesKey("userId")
 
     val nickname: Flow<String?> = context.userDataStore.data.map { preferences ->
         preferences[nicknameKey]
     }
 
+    val userId: Flow<Int?> = context.userDataStore.data.map { preferences ->
+        preferences[userIdKey]?.toIntOrNull()
+    }
+
     suspend fun getCurrentUserNick(): String? = nickname.firstOrNull()
 
-    suspend fun setUser(nickname: String) {
+    suspend fun getCurrentUserId(): Int? = userId.firstOrNull()
+
+    suspend fun setUser(nickname: String, userid: Int) {
         context.userDataStore.edit { preferences ->
             preferences[nicknameKey] = nickname
+        }
+        context.userDataStore.edit { preferences ->
+            preferences[userIdKey] = userid.toString()
         }
     }
 

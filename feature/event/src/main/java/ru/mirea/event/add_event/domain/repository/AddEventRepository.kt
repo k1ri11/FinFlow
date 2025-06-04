@@ -34,4 +34,7 @@ class AddEventRepository @Inject constructor(
         )
         api.createEvent(body)
     }
+
+    suspend fun syncUsers(userIds: List<Int>) = runCatching { api.syncUsers(userIds) }
+
 } 

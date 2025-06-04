@@ -52,6 +52,7 @@ class AddEventViewModel @Inject constructor(
                         return
                     }
                     viewModelScope.launch {
+                        repository.syncUsers(userIds = members.friends.map { it.id })
                         repository.createEvent(
                             name = name,
                             description = description,

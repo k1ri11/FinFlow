@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -100,12 +101,17 @@ fun SelectFriendsScreenContent(
     if (state.showEditDialog && state.editDialogIndex != null) {
         AlertDialog(
             onDismissRequest = {},
-            title = { Text("Введите имя друга", style = FinFlowTheme.typography.titleMedium) },
+            title = {
+                Text(
+                    stringResource(R.string.enter_friend_name),
+                    style = FinFlowTheme.typography.titleMedium
+                )
+            },
             text = {
                 OutlinedTextField(
                     value = editName,
                     onValueChange = { editName = it },
-                    label = { Text("Имя") }
+                    label = { Text(stringResource(R.string.name)) }
                 )
             },
             confirmButton = {
@@ -117,14 +123,14 @@ fun SelectFriendsScreenContent(
                         )
                     )
                 }) {
-                    Text("Сохранить")
+                    Text(stringResource(R.string.save))
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     event(SelectFriendsEvent.CancelEditDialog)
                 }) {
-                    Text("Отмена")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -134,22 +140,27 @@ fun SelectFriendsScreenContent(
     if (state.showNewFriendDialog) {
         AlertDialog(
             onDismissRequest = { event(SelectFriendsEvent.CancelNewFriendDialog) },
-            title = { Text("Введите имя", style = FinFlowTheme.typography.titleMedium) },
+            title = {
+                Text(
+                    stringResource(R.string.enter_name),
+                    style = FinFlowTheme.typography.titleMedium
+                )
+            },
             text = {
                 OutlinedTextField(
                     value = state.newFriendName,
                     onValueChange = { event(SelectFriendsEvent.NewTempFriendNameChanged(it)) },
-                    label = { Text("Имя") }
+                    label = { Text(stringResource(R.string.name)) }
                 )
             },
             confirmButton = {
                 TextButton(onClick = { event(SelectFriendsEvent.ConfirmAddTempFriend) }) {
-                    Text("Добавить")
+                    Text(stringResource(R.string.add))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { event(SelectFriendsEvent.CancelNewFriendDialog) }) {
-                    Text("Отмена")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -175,13 +186,13 @@ fun SelectFriendsScreenContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Временные друзья",
+                        text = stringResource(R.string.temp_friends),
                         style = MaterialTheme.typography.titleMedium,
                         color = FinFlowTheme.colorScheme.text.primary
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     SmallOutlinedButton(
-                        label = "Добавить",
+                        label = stringResource(R.string.add),
                         iconId = R.drawable.ic_plus,
                         onClick = { event(SelectFriendsEvent.AddTempFriend) }
                     )
@@ -220,7 +231,7 @@ fun SelectFriendsScreenContent(
             item {
                 Text(
                     modifier = Modifier.animateItem(),
-                    text = "Друзья пользователя",
+                    text = stringResource(R.string.user_friends),
                     style = MaterialTheme.typography.titleMedium,
                     color = FinFlowTheme.colorScheme.text.primary
                 )
@@ -257,7 +268,7 @@ fun SelectFriendsScreenContent(
             item {
                 FilledButton(
                     modifier = Modifier.animateItem(),
-                    label = "Сохранить",
+                    label = stringResource(R.string.save),
                     onClick = {
                         onDismiss()
                         event(SelectFriendsEvent.Save)

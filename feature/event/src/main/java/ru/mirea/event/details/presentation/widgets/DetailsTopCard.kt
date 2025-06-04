@@ -28,6 +28,7 @@ import ru.mirea.uikit.R
 import ru.mirea.uikit.components.buttons.SmallActionButton
 import ru.mirea.uikit.components.money_bar.GroupTabs
 import ru.mirea.uikit.theme.FinFlowTheme
+import kotlin.math.abs
 
 @Composable
 fun DetailsTopCard(
@@ -78,7 +79,7 @@ private fun MembersRow(cardData: CardData) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "Участники события",
+            text = stringResource(R.string.event_members),
             style = FinFlowTheme.typography.bodyMedium,
             color = FinFlowTheme.colorScheme.text.primary,
         )
@@ -92,8 +93,8 @@ private fun MembersRow(cardData: CardData) {
                     model = iconUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(R.drawable.placeholder_money),
-                    error = painterResource(R.drawable.placeholder_money)
+                    placeholder = painterResource(R.drawable.placeholder_user),
+                    error = painterResource(R.drawable.placeholder_user)
                 )
             }
         }
@@ -130,20 +131,20 @@ private fun EventDetailsMoneyBar(
     ) {
         Row {
             Text(
-                text = "Мне должны",
+                text = stringResource(R.string.owe_me),
                 style = FinFlowTheme.typography.bodySmall,
                 color = FinFlowTheme.colorScheme.text.secondary
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "Я должен",
+                text = stringResource(R.string.i_owe),
                 style = FinFlowTheme.typography.bodySmall,
                 color = FinFlowTheme.colorScheme.text.secondary
             )
         }
         Row {
             Text(
-                text = stringResource(R.string.positive_balance_value, meOweMoney),
+                text = stringResource(R.string.positive_balance_value, abs(meOweMoney)),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.positive
             )

@@ -17,5 +17,53 @@
     <string name="logout">Выйти</string>
 
     <string name="positive_balance_value">+%d ₽</string>
-    <string name="negative_balance_value">-%d ₽</string>
+    <string name="negative_balance_value">%d ₽</string>
+
+    <string name="create_event">Создать событие</string>
+    <string name="event_name">Название события</string>
+    <string name="event_description">Описание события</string>
+    <string name="temp_friends">Временные друзья</string>
+    <string name="add">Добавить</string>
+    <string name="user_friends">Друзья пользователя</string>
+    <string name="enter_friend_name">Введите имя друга</string>
+    <string name="cancel">Отмена</string>
+    <string name="enter_name">Введите имя</string>
+    <string name="fill_all_fields">Заполните все поля</string>
+    <string name="event_creation_error">Ошибка создания события</string>
+    <string name="event_title">Название события</string>
+    <string name="add_new_spending">Добавить новую трату</string>
+    <string name="event_members">Участники события</string>
+    <string name="owe_me">Мне должны</string>
+    <string name="i_owe">Я должен</string>
+    <string name="show_only_mine">Показать только мои</string>
+    <string name="balances_loading_error">Ошибка загрузки балансов</string>
+    <string name="optimized_debts_loading_error">Ошибка загрузки оптимизированных долгов</string>
+    <string name="transactions_loading_error">Ошибка загрузки транзакций</string>
+    <string name="main">Главная</string>
+    <string name="events">События</string>
+    <string name="add_event">Добавить</string>
+    <string name="events_loading_error">Ошибка загрузки событий</string>
+
+    <string name="spending_name">Название траты</string>
+    <string name="spending_amount">Сумма</string>
+    <string name="select_payer">Выберите</string>
+    <string name="paid_by">Оплачено:</string>
+    <string name="split_type">Тип разделения:</string>
+    <string name="split_equally">Поровну</string>
+    <string name="split_unequally">Не равными частями</string>
+    <string name="split_percentage">В процентах</string>
+    <string name="split_shares">В долях</string>
+    <string name="add_participant">Добавить</string>
+    <string name="with_whom">С кем разделить трату:</string>
+    <string name="distribute_left">Осталось распределить: %1$s</string>
+    <string name="distribute_left_percent">Осталось распределить: %1$s%%</string>
+    <string name="all_distributed">Все распределено успешно</string>
+    <string name="wrong_distribution">Вы неверно распределили траты</string>
+    <string name="choose_photo_source">Выберите источник фото</string>
+    <string name="choose_photo_hint">Выберите фото относящееся к трате, если выбираете фото чека, то постарайтесь чтобы на него попал Qr-code, по которому автоматически заполнится сумма покупки</string>
+    <string name="gallery">Галерея</string>
+    <string name="camera">Камера</string>
+    <string name="delete_photo">Удалить фото</string>
+    <string name="saving_error">Ошибка сохранения траты</string>
+    <string name="enter_amount">Введите сумму</string>
 </resources>

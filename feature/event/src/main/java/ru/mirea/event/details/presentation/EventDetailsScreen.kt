@@ -13,6 +13,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.mirea.core.navigation.Screens.AddSpending.createRoute
@@ -42,7 +43,6 @@ fun EventsDetailsListScreen(
 ) {
     val (state, event, effect) = holder
 
-    // TODO: обработка эффектов
     LaunchedEffect(eventId) {
         event(EventDetailsEvent.LoadDetails(eventId))
     }
@@ -54,14 +54,14 @@ fun EventsDetailsListScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 leftIconId = R.drawable.ic_arrow_back,
                 onLeftIconClick = navigateBack,
-                title = "Название события",
+                title = stringResource(R.string.event_title),
                 rightIconId = R.drawable.ic_edit
             )
         },
         floatingActionButton = {
             FilledButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                label = "Добавить новую трату",
+                label = stringResource(R.string.add_new_spending),
                 onClick = {
                     navigator.navigate(createRoute(eventId))
                 },
@@ -117,6 +117,7 @@ fun EventsDetailsScreenContent(
             GroupTabs.BALANCES -> debtsItems(state, onShowOnlyMineChanged)
             GroupTabs.OPT_BALANCES -> optimizedDebtsItems(state, onShowOnlyMineChanged)
         }
+        item { Spacer(modifier = Modifier.height(64.dp)) }
         systemNavigationPaddings()
     }
 }

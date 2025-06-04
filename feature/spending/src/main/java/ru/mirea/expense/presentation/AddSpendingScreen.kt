@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -157,7 +158,7 @@ fun AddSpendingScreen(
         topBar = {
             CommonTopBar(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Добавить трату",
+                title = stringResource(R.string.spending_name),
                 leftIconId = R.drawable.ic_arrow_back,
                 onLeftIconClick = navigateBack
             )
@@ -174,19 +175,19 @@ fun AddSpendingScreen(
                 if (state.splitType == SplitType.UNEQUALLY) {
                     when {
                         state.totalDistributed == 0 -> Text(
-                            text = "Все распределено успешно",
+                            text = stringResource(R.string.all_distributed),
                             color = FinFlowTheme.colorScheme.status.success,
                             style = FinFlowTheme.typography.bodyMedium
                         )
 
                         state.totalDistributed < 0 -> Text(
-                            text = "Вы неверно распределили траты",
+                            text = stringResource(R.string.wrong_distribution),
                             color = FinFlowTheme.colorScheme.status.error,
                             style = FinFlowTheme.typography.bodyMedium
                         )
 
                         else -> Text(
-                            text = "Осталось распределить: ${state.totalDistributed}",
+                            text = stringResource(R.string.distribute_left, state.totalDistributed),
                             color = FinFlowTheme.colorScheme.text.primary,
                             style = FinFlowTheme.typography.bodyMedium
                         )
@@ -195,26 +196,29 @@ fun AddSpendingScreen(
                 if (state.splitType == SplitType.PERCENTAGE) {
                     when {
                         state.totalDistributedPercent == 0 -> Text(
-                            text = "Все распределено успешно",
+                            text = stringResource(R.string.all_distributed),
                             color = FinFlowTheme.colorScheme.status.success,
                             style = FinFlowTheme.typography.bodyMedium
                         )
 
                         state.totalDistributedPercent < 0 -> Text(
-                            text = "Вы неверно распределили траты",
+                            text = stringResource(R.string.wrong_distribution),
                             color = FinFlowTheme.colorScheme.status.error,
                             style = FinFlowTheme.typography.bodyMedium
                         )
 
                         else -> Text(
-                            text = "Осталось распределить: ${state.totalDistributedPercent}%",
+                            text = stringResource(
+                                R.string.distribute_left_percent,
+                                state.totalDistributedPercent
+                            ),
                             color = FinFlowTheme.colorScheme.text.primary,
                             style = FinFlowTheme.typography.bodyMedium
                         )
                     }
                 }
                 FilledButton(
-                    label = "Добавить",
+                    label = stringResource(R.string.add),
                     onClick = { event(SaveClicked) },
                     enabled = state.buttonEnabled
                 )
@@ -288,13 +292,13 @@ private fun DialogContent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Выберите источник фото",
+                text = stringResource(R.string.choose_photo_source),
                 style = FinFlowTheme.typography.titleMedium,
                 color = FinFlowTheme.colorScheme.text.primary,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Выберите фото относящееся к трате, если выбираете фото чека, то постарайтесь чтобы на него попал Qr-code, по которому автоматически заполнится сумма покупки",
+                text = stringResource(R.string.choose_photo_hint),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.primary,
                 textAlign = TextAlign.Center
@@ -303,14 +307,19 @@ private fun DialogContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Button(onClick = onGalleryButtonClick) { Text(text = "Галерея") }
-                Button(onClick = onCameraButtonClick) { Text(text = "Камера") }
+                Button(onClick = onGalleryButtonClick) { Text(text = stringResource(R.string.gallery)) }
+                Button(onClick = onCameraButtonClick) { Text(text = stringResource(R.string.camera)) }
             }
             if (state.photoUri != null) {
                 Button(
                     onClick = onDeleteButtonClick,
                     colors = buttonColors(containerColor = FinFlowTheme.colorScheme.status.error)
-                ) { Text(text = "Удалить фото", color = FinFlowTheme.colorScheme.text.invert) }
+                ) {
+                    Text(
+                        text = stringResource(R.string.delete_photo),
+                        color = FinFlowTheme.colorScheme.text.invert
+                    )
+                }
             }
         }
     }
@@ -341,14 +350,14 @@ private fun SpendingFields(state: AddSpendingState, event: (AddSpendingEvent) ->
     CommonEditTextField(
         value = state.name,
         onValueChange = { event(NameChanged(it)) },
-        label = "Название траты",
+        label = stringResource(R.string.spending_name),
         modifier = Modifier.fillMaxWidth()
     )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Сумма траты",
+            text = stringResource(R.string.spending_amount),
             style = FinFlowTheme.typography.titleMedium,
             color = FinFlowTheme.colorScheme.text.primary,
         )
@@ -359,7 +368,7 @@ private fun SpendingFields(state: AddSpendingState, event: (AddSpendingEvent) ->
                 val intValue = str.toIntOrNull() ?: 0
                 event(AmountChanged(intValue))
             },
-            placeholder = "Введите сумму"
+            placeholder = stringResource(R.string.enter_amount)
         )
 
     }
@@ -376,12 +385,12 @@ private fun PayerAndSplitType(state: AddSpendingState, event: (AddSpendingEvent)
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = "Оплачено:",
+                text = stringResource(R.string.paid_by),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.primary
             )
             SmallOutlinedButton(
-                label = state.payer?.profile?.nickname ?: "Выберите",
+                label = state.payer?.profile?.nickname ?: stringResource(R.string.select_payer),
                 onClick = { event(SelectPayerClicked) },
                 shape = FinFlowTheme.shapes.small,
                 iconId = R.drawable.ic_drop_down
@@ -392,7 +401,7 @@ private fun PayerAndSplitType(state: AddSpendingState, event: (AddSpendingEvent)
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = "Тип разделения:",
+                text = stringResource(R.string.split_type),
                 style = FinFlowTheme.typography.bodyMedium,
                 color = FinFlowTheme.colorScheme.text.primary
             )
@@ -415,12 +424,12 @@ private fun ParticipantsRow(event: (AddSpendingEvent) -> Unit) {
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = "С кем разделить трату:",
+            text = stringResource(R.string.with_whom),
             style = FinFlowTheme.typography.bodyMedium,
             color = FinFlowTheme.colorScheme.text.primary,
         )
         SmallOutlinedButton(
-            label = "Добавить",
+            label = stringResource(R.string.add_participant),
             onClick = { event(AddParticipantClicked) },
             iconId = R.drawable.ic_plus,
             modifier = Modifier.background(FinFlowTheme.colorScheme.background.secondary)

@@ -2,7 +2,6 @@ package ru.mirea.event.add_event.presentation
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,6 +33,7 @@ import coil3.compose.AsyncImage
 import kotlinx.coroutines.flow.MutableSharedFlow
 import ru.mirea.core.navigation.navigator.Navigator
 import ru.mirea.core.util.UiHandler
+import ru.mirea.core.util.collectInLaunchedEffect
 import ru.mirea.core.util.useBy
 import ru.mirea.event.add_event.domain.models.Category
 import ru.mirea.event.add_event.domain.models.CategoryIcon
@@ -62,7 +64,7 @@ fun AddEventScreen(
         topBar = {
             CommonTopBar(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                title = "Создать событие",
+                title = stringResource(R.string.create_event),
                 leftIconId = R.drawable.ic_arrow_back,
                 onLeftIconClick = onNavigateBack,
                 rightIconId = R.drawable.ic_person_add,
@@ -72,9 +74,8 @@ fun AddEventScreen(
         floatingActionButton = {
             FilledButton(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 80.dp),
-                label = "Создать событие",
+                    .padding(horizontal = 16.dp),
+                label = stringResource(R.string.create_event),
                 onClick = { event(CreateEvent) }
             )
         },
@@ -91,6 +92,13 @@ fun AddEventScreen(
                 showSelectFriendsBS = false
             }
         )
+    }
+
+    effect.collectInLaunchedEffect { addEventEffect ->
+        when (addEventEffect) {
+            AddEventEffect.Success -> onNavigateBack()
+            else -> {}
+        }
     }
 }
 
@@ -112,15 +120,16 @@ fun AddEventScreenContent(
         item {
             AsyncImage(
                 modifier = Modifier
-                    .size(100.dp)
-                    .clickable { /* выбрать картинку */ },
+                    .size(100.dp),
                 model = state.icon,
                 contentDescription = null,
+                placeholder = painterResource(R.drawable.placeholder_money),
+                error = painterResource(R.drawable.placeholder_money)
             )
         }
         item {
             CommonEditTextField(
-                label = "Название события",
+                label = stringResource(R.string.event_name),
                 value = state.name,
                 onValueChange = { event(AddEventEvent.NameChanged(it)) }
             )
@@ -128,7 +137,7 @@ fun AddEventScreenContent(
 
         item {
             CommonEditTextField(
-                label = "Описание события",
+                label = stringResource(R.string.event_description),
                 value = state.description,
                 onValueChange = { event(AddEventEvent.DescriptionChanged(it)) }
             )
@@ -148,7 +157,7 @@ fun AddEventScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateItem(),
-                    text = "Друзья",
+                    text = stringResource(R.string.friends),
                     style = MaterialTheme.typography.titleMedium,
                     color = FinFlowTheme.colorScheme.text.primary
                 )
@@ -164,7 +173,7 @@ fun AddEventScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateItem(),
-                    text = "Временные друзья",
+                    text = stringResource(R.string.temp_friends),
                     style = MaterialTheme.typography.titleMedium,
                     color = FinFlowTheme.colorScheme.text.primary
                 )
@@ -181,6 +190,9 @@ fun AddEventScreenContent(
                     .padding(vertical = 8.dp, horizontal = 16.dp),
             ) {
                 Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
                     text = dummy,
                     style = FinFlowTheme.typography.bodyMedium,
                     color = FinFlowTheme.colorScheme.text.primary

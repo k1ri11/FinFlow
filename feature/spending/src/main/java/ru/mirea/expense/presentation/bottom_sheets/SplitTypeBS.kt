@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.mirea.expense.presentation.SplitType
 import ru.mirea.uikit.AppBottomSheet
+import ru.mirea.uikit.R
 import ru.mirea.uikit.theme.FinFlowTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,13 +57,19 @@ private fun SplitTypeItem(
     onItemSelected: (SplitType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val title = when (item) {
+        SplitType.EQUALLY -> stringResource(R.string.split_equally)
+        SplitType.UNEQUALLY -> stringResource(R.string.split_unequally)
+        SplitType.PERCENTAGE -> stringResource(R.string.split_percentage)
+        SplitType.SHARES -> stringResource(R.string.split_shares)
+    }
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onItemSelected(item) }
     ) {
         Text(
-            text = item.title,
+            text = title,
             style = FinFlowTheme.typography.bodyMedium,
             color = FinFlowTheme.colorScheme.text.primary,
             modifier = Modifier

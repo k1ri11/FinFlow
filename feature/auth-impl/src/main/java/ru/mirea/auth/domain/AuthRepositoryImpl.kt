@@ -28,7 +28,7 @@ class AuthRepositoryImpl @Inject constructor(
                     )
                 )
             }
-        }.onSuccess { userService.setUser(it.user.nickname) }
+        }.onSuccess { userService.setUser(it.user.nickname, it.user.id) }
     }
 
     override suspend fun register(
@@ -48,7 +48,7 @@ class AuthRepositoryImpl @Inject constructor(
                     )
                 )
             }
-        }.onSuccess { userService.setUser(it.user.nickname) }
+        }.onSuccess { userService.setUser(it.user.nickname, it.user.id) }
     }
 
     override suspend fun logout(): Result<Unit> {

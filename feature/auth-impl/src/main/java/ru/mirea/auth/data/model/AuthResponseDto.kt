@@ -20,12 +20,12 @@ data class AuthResponseDto(
         @SerialName("email")
         val email: String,
         @SerialName("id")
-        val id: Long,
+        val id: Int,
         @SerialName("name")
         val name: String? = null,
         @SerialName("nickname")
         val nickname: String,
         @SerialName("roles")
-        val roles: List<String>
+        val roles: List<String>,
     )
 }

@@ -22,4 +22,12 @@ class AddEventApi @Inject constructor(
             setBody(body)
         }
     }
+
+    suspend fun syncUsers(userIds: List<Int>) {
+        networkClient.post("user/sync") {
+            setBody(mapOf("user_ids" to userIds))
+        }
+    }
+
+
 } 

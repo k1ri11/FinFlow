@@ -3,6 +3,8 @@ package ru.mirea.event.details.presentation
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.mirea.core.service.UserService
+import ru.mirea.core.util.AppDispatchers
 import ru.mirea.core.util.BaseViewModel
 import ru.mirea.event.details.data.repository.DetailsRepository
 import ru.mirea.event.details.domain.toDomain
@@ -12,9 +14,9 @@ import javax.inject.Inject
 @HiltViewModel
 class EventDetailsViewModel @Inject constructor(
     private val detailsRepository: DetailsRepository,
+    private val userService: UserService,
+    private val dispatchers: AppDispatchers,
 ) : BaseViewModel<EventDetailsState, EventDetailsEvent, EventDetailsEffect>(EventDetailsState()) {
-
-    private val userId = 1 // захардкоженный id пользователя
 
     override fun event(event: EventDetailsEvent) {
         when (event) {
@@ -39,21 +41,27 @@ class EventDetailsViewModel @Inject constructor(
     }
 
     private fun filterDebts() {
-        val stateValue = state.value
-        val filtered = if (stateValue.showOnlyMine) {
-            stateValue.debts.filter { it.fromUserId == userId || it.toUserId == userId }
-        } else stateValue.debts
-        val oweToMeSum = filtered.filter { it.toUserId == userId }.sumOf { it.amount }
-        updateState { it.copy(filteredDebts = filtered, oweToMeSum = oweToMeSum) }
+        viewModelScope.launch(dispatchers.io) {
+            val userId = userService.getCurrentUserId()
+            val stateValue = state.value
+            val filtered = if (stateValue.showOnlyMine) {
+                stateValue.debts.filter { it.fromUserId == userId || it.toUserId == userId }
+            } else stateValue.debts
+            val oweToMeSum = filtered.filter { it.toUserId == userId }.sumOf { it.amount }
+            updateState { it.copy(filteredDebts = filtered, oweToMeSum = oweToMeSum) }
+        }
     }
 
     private fun filterOptimizedDebts() {
-        val stateValue = state.value
-        val filtered = if (stateValue.showOnlyMine) {
-            stateValue.optimizedDebts.filter { it.fromUserId == userId || it.toUserId == userId }
-        } else stateValue.optimizedDebts
-        val myOweSum = filtered.filter { it.fromUserId == userId }.sumOf { it.amount }
-        updateState { it.copy(filteredOptimizedDebts = filtered, myOweSum = myOweSum) }
+        viewModelScope.launch(dispatchers.io) {
+            val userId = userService.getCurrentUserId()
+            val stateValue = state.value
+            val filtered = if (stateValue.showOnlyMine) {
+                stateValue.optimizedDebts.filter { it.fromUserId == userId || it.toUserId == userId }
+            } else stateValue.optimizedDebts
+            val myOweSum = filtered.filter { it.fromUserId == userId }.sumOf { it.amount }
+            updateState { it.copy(filteredOptimizedDebts = filtered, myOweSum = myOweSum) }
+        }
     }
 
     private fun loadDetails(eventId: Int) {

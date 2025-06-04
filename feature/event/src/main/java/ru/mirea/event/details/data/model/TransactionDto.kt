@@ -25,7 +25,6 @@ data class TransactionDto(
     @SerialName("id") val id: Int,
     @SerialName("event_id") val eventId: Int,
     @SerialName("name") val name: String,
-    @SerialName("transaction_category_id") val transactionCategoryId: Int,
     @SerialName("type") val type: String,
     @SerialName("from_user") val fromUser: Int,
     @SerialName("amount") val amount: Int,

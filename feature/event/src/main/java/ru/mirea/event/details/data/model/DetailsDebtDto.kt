@@ -10,4 +10,10 @@ data class DetailsDebtDto(
     @SerialName("to_user_id") val toUserId: Int,
     @SerialName("amount") val amount: Int,
     @SerialName("transaction_id") val transactionId: Int,
-) 
+    @SerialName("requestor") val requestor: Requestor,
+) {
+    @Serializable
+    data class Requestor(
+        @SerialName("name") val name: String,
+    )
+}
